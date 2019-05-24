@@ -1,0 +1,48 @@
+@import './reset.less';
+
+.home-tip {
+  font-size: 15px;
+  color: @MainText;
+  li {
+    padding: 10px;
+  }
+  &.fz12 {
+    padding-top: 10px;
+    font-size: 12px;
+    li {
+      padding: 0 10px;
+      color: #a7b0b5;
+      .dot{
+        float: left;
+      }
+    }
+  }
+}
+.tab{
+  background-color: #fff;
+  padding: 10px 15px;
+  font-size: 15px;
+  >div{
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .tabTitle{
+    width: 28%;
+  }
+  .tabBtn{
+    font-size: 13px;
+    border: 2px solid #F3F5F9;
+    background: #F3F5F9;
+    border-radius: 5px;
+    color: #414B51;
+    margin-right: 15px;
+    width: 25%;
+    text-align: center;
+    line-height: 24px;
+    &.on{
+      background: rgba(26,118,224,0.10);
+      border-color: #0E81FE;
+      color: #1A76E0;
+    }
+  }
+}
