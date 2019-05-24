@@ -81,7 +81,22 @@ export default {
 
 	methods: {
 		onLoad() {
-			console.log(123)
+			querySignRecords({
+				pageIndex: this.pageIndex,
+				pageSize: this.pageSize,
+				key: this.key,
+			})
+			.then(({ result }) => {
+				this.loading = false;
+				if (result.length === 0) {
+					this.finished = true;
+				}
+				this.pageIndex += 1;
+				this.list.push(...result)
+			})
+		},
+		loadData() {
+			this.loading = true;
 			querySignRecords({
 				pageIndex: this.pageIndex,
 				pageSize: this.pageSize,
@@ -100,6 +115,7 @@ export default {
 			this.pageIndex = 1;
 			this.list = [];
 			this.finished = false;
+
 		},
 		onClickLeft() {
 			if (!this.canBack) return
@@ -107,9 +123,11 @@ export default {
 		},
 		onSearch() {
 			this.initQuery();
+			this.loadData();
 		},
 		onClear() {
 			this.initQuery();
+			this.loadData();
 		},
 		getStepText(step) {
 			let stepMap = {
