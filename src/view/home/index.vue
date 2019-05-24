@@ -158,7 +158,8 @@ export default {
         { pospal_account: Cookies.get('account')},
         { isShowError: false }
       ).then(({ result }) => {
-
+        Cookies.set('sign_step', result.signing.sign_step || 0);
+        Cookies.set('sign_id', result.signing.id);
         let step = result.signing.sign_step > 3 ? result.signing.sign_step - 1 : result.signing.sign_step;
         this.active =  step || 0
         setStore('pospal_signing', result.signing)
