@@ -222,10 +222,12 @@ export default {
     },
     init() {
       let signing = getStore('pospal_signing', true);
+      this.signing = signing;
       if (signing.sign_step === 4) {
         this.accountName.type = 2;
         this.showAuth();
       }
+  
     },
     confirmArea(data) {
       
@@ -251,12 +253,12 @@ export default {
     },
     getParams() {
       let params = {
-        'sign_id': this.signId,
+        'sign_id': Cookies.get('sign_id'),
         'bank_acct_type': ''+(this.accountName.type - 1),
         'bank_acct_no': this.accountName.name,
         'bank_branch_name': this.accountName.branchName,
         'bank_no': this.accountName.branchCode,
-        'bank_acct_name': this.accountName.type === 2 ? this.accountName.openName : Cookies.get('legal_name')
+        'bank_acct_name': this.accountName.type === 2 ? this.accountName.openName : this.signing.legal_name
       }
 
       return params

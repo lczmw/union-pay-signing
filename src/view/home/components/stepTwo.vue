@@ -183,6 +183,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 import Area from '@/components/Area'
 import Upload from '@/components/Upload'
 import { setBusinessInfo } from '@/api'
@@ -272,7 +273,7 @@ export default {
     },
     getParams() {
       let params = {
-        'sign_id': this.signId,
+        'sign_id': Cookies.get('sign_id'),
         'license_type': this.businessInfo.index,
         'shop_name': this.businessInfo.name,
         'shop_province_id': this.businessInfo.provinceId,

@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 import { companyAccountVerify } from '@/api'
 export default {
   data() {
@@ -55,7 +56,7 @@ export default {
     },
     getParams() {
       let params = {
-        'sign_id': this.signId,
+        'sign_id': Cookies.get('sign_id'),
         'trans_amt': this.transAmt,
         'verify_code': this.verifyCode,
       }
@@ -71,9 +72,9 @@ export default {
       .then(() => {
 
         companyAccountVerify(params)
-        .then((res) => {
+        .then(({ result }) => {
             this.hideAuth();
-            this.$emit('on-success', res)
+            this.$emit('on-success', result)
         })
         .catch(() => {})
       })

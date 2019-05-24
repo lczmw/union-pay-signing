@@ -236,8 +236,8 @@ export default {
     hideAuth() {
       this.showAuth = false;
     },
-    onAuthSuccess(res) {
-      console.log(res)
+    onAuthSuccess(data) {
+      window.location = data.ressigning.h5_agreement_sign_url
     },
     nextPage() {
       // this.docmHeight = document.documentElement.clientHeight
