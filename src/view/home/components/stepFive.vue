@@ -49,7 +49,7 @@
       </div>
       <div class="step-status-content" v-if="signing.fail_reason !== ''">
         <span class="dot red">●</span>审核失败原因:
-        <span class="red">审核失败原因审核失败原因:{{ signing.fail_reason }}</span>
+        <span class="red">{{ signing.fail_reason }}</span>
       </div>
     </div>
 
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { getStore } from '@/utils'
 export default {
   data() {
     return {

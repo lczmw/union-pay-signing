@@ -67,7 +67,7 @@
           <van-button type="primary" size="large" @click="nextPage">下一步</van-button>
         </footer>
       </div>
-      <div v-show="active==6" class="step5 mt10">
+      <div v-show="active==5" class="step5 mt10">
         <step-five
           ref="step5" @nextPage="nextPage"></step-five>
       </div>
