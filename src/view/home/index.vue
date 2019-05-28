@@ -162,7 +162,8 @@ export default {
         Cookies.set('sign_id', result.signing.id);
         let step = result.signing.sign_step > 3 ? result.signing.sign_step - 1 : result.signing.sign_step;
         this.active =  step || 0
-        setStore('pospal_signing', result.signing)
+
+        this.globalMixin_updateSigning(result.signing)
         this.init(result.signing)
       })
       .catch(() => {
@@ -191,7 +192,7 @@ export default {
     },
     onConfirm(value, index) {
       this.showBusinessType = false
-      this.$toast(`当前值：${value}, 当前索引：${index}`);
+      // this.$toast(`当前值：${value}, 当前索引：${index}`);
       this.businessInfo.type = value
     },
     showAgreeFun() {
@@ -237,6 +238,7 @@ export default {
       this.showAuth = false;
     },
     onAuthSuccess(data) {
+      this.globalMixin_updateSigning(data)
       window.location = data.ressigning.h5_agreement_sign_url
     },
     nextPage() {

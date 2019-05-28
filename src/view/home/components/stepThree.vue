@@ -289,6 +289,7 @@ export default {
         }
         setBankInfo(params)
         .then(({ result }) => {
+            this.globalMixin_updateSigning(result)
            if (result.sign_step === 4) {
             this.showAuth();
            } else if (result.sign_step === 5) {} {

@@ -206,8 +206,8 @@ export default {
           return
         }
         setRealUserInfo(params)
-        .then(() => {
-           Cookies.set('legal_name', this.realName.name)
+        .then(({ result }) => {
+          this.globalMixin_updateSigning(result)
            this.$emit('nextPage')
         })
         .catch(() => {})

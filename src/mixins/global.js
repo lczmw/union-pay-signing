@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { setStore, removeStore } from '@/utils'
 
 export default {
     data() {
@@ -57,8 +58,8 @@ export default {
                 resolve();
             })
         },
-        globalMixin_updateSigning() {
-            
+        globalMixin_updateSigning(signing = {}) {
+            setStore('pospal_signing', signing)
         }
 
     }
