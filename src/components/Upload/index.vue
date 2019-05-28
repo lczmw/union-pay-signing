@@ -1,6 +1,11 @@
 <template>
   <van-uploader :after-read="onRead" :disabled="disabled" class="home-upload-content-item">
-    <img :src="url" alt>
+    <img :src="url" alt v-if="!showUploadedImg">
+
+    <div v-else class="upload-img-wrapper">
+        <img :src="url" alt>
+        <div>重新上传</div>
+    </div>
   </van-uploader>
 </template>
 
@@ -32,10 +37,23 @@ export default {
   data() {
     return {
       url: require('../../assect/img/add.png'),
-      uploaded: false
+      uploaded: false,
+      showUploadedImg: false
     }
   },
   created() {
+    let { pic_list } = this.globalMixin_getSigning();
+    let pucList = Object.prototype.toString.call(pic_list) === '[object Array]' ? pic_list : [];
+    let hasUploaded = pucList.some((item) => {
+      return item.document_type = this.documentType
+    })
+    if (hasUploaded) {
+      this.url = require('../../assect/img/hasUpload.png');
+      this.showUploadedImg = true;
+      this.uploaded = true;
+      return
+    }
+
     switch (this.type) {
       case '1':
         this.url = require('../../assect/img/add.png')
@@ -60,7 +78,7 @@ export default {
   methods: {
     onRead(file) {
       this.url = file.content
-      console.log('sign_id',Cookies.set('sign_id'))
+      // console.log('sign_id',Cookies.set('sign_id'))
       uploadPic({
         document_type: this.documentType,
         pic_base64: this.url,
@@ -85,4 +103,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+  .upload-img-wrapper{
+    display: flex;flex-direction: column;
+  }
+  .upload-img-wrapper img{
+    height: 80px!important;
+  }
+  .upload-img-wrapper div{
+    flex: auto; background: #1D84FA;height: 27px;display: flex;align-items: center;justify-content: center;font-size: 12px;color: #FFFFFF
+  }
 </style>

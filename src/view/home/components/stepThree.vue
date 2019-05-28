@@ -303,6 +303,22 @@ export default {
 
       })
     },
+  },
+  created() {
+    // let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
+
+
+    // this.businessInfo.index = license_type;
+    // this.businessInfo.type =  ['多合一营业执照', '普通营业执照'][license_type];
+    // this.businessInfo.name = shop_name;
+    // this.shop.provinceId = shop_province_id;
+    // this.shop.cityId = shop_city_id;
+    // this.shop.countryId = shop_country_id;
+    // this.businessInfo.road = shop_road;
+    // this.businessInfo.number = shop_house_no;
+    // this.businessInfo.moreAddr = shop_addr_ext;
+    // this.industryCode = mccCode;
+    // this.businessInfo.code = shop_lic;
   }
 }
 </script>

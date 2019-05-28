@@ -226,6 +226,15 @@ export default {
     goBack() {
       this.$emit('goBack')
     }
+  },
+  created() {
+    let { legal_name, legal_idcard_no, legal_mobile, legal_email, legal_card_deadline } = this.globalMixin_getSigning()
+
+    this.realName.name = legal_name;
+    this.realName.idCard = legal_idcard_no;
+    this.realName.tel = legal_mobile;
+    this.realName.email = legal_email;
+    this.realName.date = legal_card_deadline
   }
 }
 </script>

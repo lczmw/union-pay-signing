@@ -198,6 +198,14 @@ export default {
     industryId: '',
     industryText: '',
   },
+  watch: {
+    industryId: {
+      immediate: true,
+      handler(val) {
+        this.industryCode = val;
+      }
+    }
+  },
   data() {
     return {
       twoDisabled: false,
@@ -226,18 +234,34 @@ export default {
         code: false
       },
       showBusinessType: false,
-      // businessTypeOption: ['多合一营业执照', '普通营业执照', '无营业执照'],
       businessTypeOption: ['多合一营业执照', '普通营业执照'],
       showArea: false,
+      shop: {}
     }
   },
   created() {
+
+    let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
+
+
+    this.businessInfo.index = license_type;
+    this.businessInfo.type =  ['多合一营业执照', '普通营业执照'][license_type];
+    this.businessInfo.name = shop_name;
+    this.shop.provinceId = shop_province_id;
+    this.shop.cityId = shop_city_id;
+    this.shop.countryId = shop_country_id;
+    this.businessInfo.road = shop_road;
+    this.businessInfo.number = shop_house_no;
+    this.businessInfo.moreAddr = shop_addr_ext;
+    this.industryCode = mccCode;
+    this.businessInfo.code = shop_lic;
   },
   methods: {
     init() {
       // console.log('22222222222')
     },
     onConfirm(value, index) {
+      console.log(index)
       this.showBusinessType = false
       // this.$toast(`当前值：${value}, 当前索引：${index}`);
       this.businessInfo.type = value
@@ -251,6 +275,12 @@ export default {
       this.businessInfo.provinceId = data[0].code
       this.businessInfo.cityId = data[1].code
       this.businessInfo.countryId = data[2].code
+
+      this.shop = {
+        provinceId: data[0].code,
+        cityId: data[1].code,
+        countryId: data[2].code,
+      }
       // console.log(province + city + country)
     },
     showAreaFun() {
@@ -276,15 +306,16 @@ export default {
         'sign_id': Cookies.get('sign_id'),
         'license_type': this.businessInfo.index,
         'shop_name': this.businessInfo.name,
-        'shop_province_id': this.businessInfo.provinceId,
-        'shop_city_id': this.businessInfo.cityId,
-        'shop_country_id': this.businessInfo.countryId,
+        'shop_province_id': this.shop.provinceId,
+        'shop_city_id': this.shop.cityId,
+        'shop_country_id': this.shop.countryId,
         'shop_road': this.businessInfo.road,
         'shop_house_no': this.businessInfo.number,
         'shop_addr_ext': this.businessInfo.moreAddr,
-        'mccCode': this.industryId,
+        'mccCode': this.industryCode,
         'shop_lic': this.businessInfo.code,
       }
+
       return params
     },
     nextPage() {

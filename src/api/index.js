@@ -78,3 +78,12 @@ export function querySignRecords(data) {
     data
   }) 
 }
+
+// 重新申请
+export function reSgin(data) {
+  return request({
+    url: 'UnionPaySigning/ReSgin',
+    method: 'post',
+    data
+  }) 
+}

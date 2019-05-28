@@ -2,7 +2,7 @@
   <div>
     <div v-show="!showAgree&&!showIndustry&&!showAuth" :class="active==5?'home-wrapper white':'home-wrapper'">
       <header>
-        <van-nav-bar title="商户自助签约" :left-arrow="active!=0" @click-left="goBack"/>
+        <van-nav-bar title="商户自助签约" :left-arrow="active!=-1" @click-left="$router.go(-1)"/>
       </header>
       <van-steps :active="active" active-color="#1A76E0">
         <!-- <van-step>银豹账号</van-step> -->
@@ -22,10 +22,10 @@
           账户
           <br>信息
         </van-step>
-        <van-step>
+      <!--   <van-step>
           签订
           <br>协议
-        </van-step>
+        </van-step> -->
         <van-step>
           资质
           <br>审核
@@ -61,15 +61,15 @@
           ref="step3" :footerHS="footerHS"
           @showAuth="showAuth=true" @nextPage="nextPage" @goBack="goBack"></step-three>
       </div>
-      <div v-show="active==4">
+    <!--   <div v-show="active==4">
         <footer>
           <van-button type="warning" size="large" @click="goBack">上一步</van-button>
           <van-button type="primary" size="large" @click="nextPage">下一步</van-button>
         </footer>
-      </div>
+      </div -->
       <div v-show="active==5" class="step5 mt10">
         <step-five
-          ref="step5" @nextPage="nextPage"></step-five>
+          ref="step5" @nextPage="nextPage" @on-reapply="onReapply"></step-five>
       </div>
       <!-- <footer :style="hidshow?'':'position:relative'">
         <div v-if="active==0">
@@ -148,7 +148,7 @@ export default {
     },
     active() {
       this.init()
-      console.log(this.active)
+      // console.log(this.active)
     }
   },
   methods: {
@@ -171,10 +171,9 @@ export default {
           this.$router.replace('/')
       })
     },
-    init(signing) {
+    init(signing = {}) {
 
       this.$nextTick(function() {
-        
         if(this.active == 0){
           this.$refs.step0.init()
         }else if(this.active == 1){
@@ -186,7 +185,11 @@ export default {
         }else if(this.active == 4){
           window.location = signing.h5_agreement_sign_url
         }else if (this.active == 5) {
-          this.$refs.step5.init()
+          if (signing.sign_step === 6 && ['00', '02', '03', '06'].includes(signing.apply_status) ) {
+            window.location.replace(signing.h5_agreement_sign_url)
+          }else {
+            this.$refs.step5.init()
+          }
         }
       })
     },
@@ -253,8 +256,11 @@ export default {
       // Toast('返回');
     },
     onRead(file) {
-      console.log(file)
+      // console.log(file)
     },
+    onReapply() {
+      this.verifyPospalAccount()
+    }
   },
   created() {
     this.verifyPospalAccount()
