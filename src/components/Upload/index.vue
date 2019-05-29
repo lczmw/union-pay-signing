@@ -56,29 +56,30 @@ export default {
         this.url = require('../../assect/img/hasUpload.png');
         this.showUploadedImg = true;
         this.uploaded = true;
-        return
+        
+      }else {
+         switch (this.type) {
+          case '1':
+            this.url = require('../../assect/img/add.png')
+            break
+          case '2':
+            this.url = require('../../assect/img/cardFace.png')
+            break
+          case '3':
+            this.url = require('../../assect/img/cardReverse.png')
+            break
+          case '4':
+            this.url = require('../../assect/img/selfie.png')
+            break
+          default:
+            this.url = require('../../assect/img/add.png')
+        }
+
+        this.showUploadedImg = false;
+        this.uploaded = false;
       }
 
-      switch (this.type) {
-        case '1':
-          this.url = require('../../assect/img/add.png')
-          break
-        case '2':
-          this.url = require('../../assect/img/cardFace.png')
-          break
-        case '3':
-          this.url = require('../../assect/img/cardReverse.png')
-          break
-        case '4':
-          this.url = require('../../assect/img/selfie.png')
-          break
-        default:
-          this.url = require('../../assect/img/add.png')
-      }
-
-      if (this.type == 1) {
-        this.url = require('../../assect/img/add.png')
-      }
+     
     },
     onRead(file) {
       this.url = file.content
