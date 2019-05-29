@@ -227,7 +227,17 @@ export default {
         this.accountName.type = 2;
         this.showAuth();
       }
-  
+
+      this.initPageData();
+      this.initUploadStatus();
+    },
+    initPageData() {
+       let { bank_acct_type, bank_acct_no, bank_branch_name, bank_no, bank_acct_name } = this.globalMixin_getSigning()
+        this.accountName.type = ~~bank_acct_type + 1;
+        this.accountName.name =  bank_acct_no;
+        this.accountName.branchName = bank_branch_name;
+        this.accountName.branchCode = bank_no;
+        this.accountName.openName = bank_acct_name;
     },
     confirmArea(data) {
       
@@ -273,6 +283,11 @@ export default {
       })
       return !notUploaded;
     },
+    initUploadStatus() {
+      ['0', '1'].forEach((item) => {
+        this.$refs[`upload${ item }`].init();
+      })
+    },
     nextPage() {
 
       let params = this.getParams()
@@ -289,12 +304,12 @@ export default {
         }
         setBankInfo(params)
         .then(({ result }) => {
-            this.globalMixin_updateSigning(result)
+
+          this.globalMixin_updateSigning(result)
            if (result.sign_step === 4) {
             this.showAuth();
            } else if (result.sign_step === 5) {} {
              window.location = result.h5_agreement_sign_url
-              this.$emit('nextPage')
            }
         })
         .catch(() => {})
@@ -305,20 +320,7 @@ export default {
     },
   },
   created() {
-    // let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
-
-
-    // this.businessInfo.index = license_type;
-    // this.businessInfo.type =  ['多合一营业执照', '普通营业执照'][license_type];
-    // this.businessInfo.name = shop_name;
-    // this.shop.provinceId = shop_province_id;
-    // this.shop.cityId = shop_city_id;
-    // this.shop.countryId = shop_country_id;
-    // this.businessInfo.road = shop_road;
-    // this.businessInfo.number = shop_house_no;
-    // this.businessInfo.moreAddr = shop_addr_ext;
-    // this.industryCode = mccCode;
-    // this.businessInfo.code = shop_lic;
+   
   }
 }
 </script>

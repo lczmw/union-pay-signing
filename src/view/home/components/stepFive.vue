@@ -1,9 +1,17 @@
 <template>
-  <div class="stepFour">
+  <div class="stepFour" v-if="signing.apply_status !== '-1'">
     <div class="greyBg"></div>
+    <!-- 加载中 -->
+    <div class="step-status" v-if="signing.apply_status === '-1'">
+      <div class="step-status-title">
+        <div class="step-status-msg">
+          <div>加载中...</div>
+        </div>
+      </div>
+    </div>
 
     <!-- 签约中 -->
-    <div class="step-status" v-if="signing.apply_status === '01'">
+    <div class="step-status" v-else-if="signing.apply_status === '01'">
       <div class="step-status-title">
         <img class="step-status-img" src="../../../assect/img/pass-img.png">
         <div class="step-status-msg">
@@ -88,8 +96,10 @@ import { reSgin } from '@/api'
 export default {
   data() {
     return {
-      status: 1,
-      signing: {}
+      status: '-1',
+      signing: {
+        apply_status: '-1'
+      }
     }
   },
   methods: {

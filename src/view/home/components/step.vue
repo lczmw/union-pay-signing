@@ -73,8 +73,7 @@ export default {
   },
   methods: {
     init() {
-
-      // console.log('00000')
+      this.initPageData();
     },
     showAreaFun() {
       this.showArea = true
@@ -132,13 +131,15 @@ export default {
       // this.detailFocused = key === 'addressDetail';
       // this.$emit('focus', key);
     },
+    initPageData() {
+      let { store_type, fee_rate, need_open_pospal_accounts } = this.globalMixin_getSigning()
+      this.accountName.type = store_type;
+      this.needOpenPospalAccounts = need_open_pospal_accounts;
+      this.feeRate = fee_rate
+    }
   },
-  created() {
-    let { store_type, fee_rate, need_open_pospal_accounts } = this.globalMixin_getSigning()
-    this.accountName.type = store_type;
-    this.needOpenPospalAccounts = need_open_pospal_accounts;
-    this.feeRate = fee_rate;
-
+  mounted() {
+  
   }
 }
 </script>

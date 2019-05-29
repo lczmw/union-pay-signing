@@ -146,24 +146,14 @@ export default {
   },
   methods: {
     init() {
-      // console.log('111111111')
+      this.initPageData();
+      this.initUploadStatus();
     },
     confirmDate(value) {
       this.showDate = false
       this.realName.date = getDay('day', value)
     },
-    // getAuthCode: function() {
-    //   this.sendAuthCode = false;
-    //   this.auth_time = 6;
-    //   var auth_timetimer = setInterval(() => {
-    //     this.auth_time--;
-    //     if (this.auth_time <= 0) {
-    //       this.sendAuthCode = true;
-    //       this.codeMsg = '重新发送'
-    //       clearInterval(auth_timetimer);
-    //     }
-    //   }, 1000)
-    // },
+
 
     getParams() {
       let params = {
@@ -223,18 +213,26 @@ export default {
       })
       return !notUploaded;
     },
+    initUploadStatus() {
+      ['0', '1'].forEach((item) => {
+        this.$refs[`upload${ item }`].init();
+      })
+    },
     goBack() {
       this.$emit('goBack')
+    },
+    initPageData() {
+      let { legal_name, legal_idcard_no, legal_mobile, legal_email, legal_card_deadline } = this.globalMixin_getSigning()
+
+      this.realName.name = legal_name;
+      this.realName.idCard = legal_idcard_no;
+      this.realName.tel = legal_mobile;
+      this.realName.email = legal_email;
+      this.realName.date = legal_card_deadline
     }
   },
-  created() {
-    let { legal_name, legal_idcard_no, legal_mobile, legal_email, legal_card_deadline } = this.globalMixin_getSigning()
-
-    this.realName.name = legal_name;
-    this.realName.idCard = legal_idcard_no;
-    this.realName.tel = legal_mobile;
-    this.realName.email = legal_email;
-    this.realName.date = legal_card_deadline
+  mounted() {
+   
   }
 }
 </script>

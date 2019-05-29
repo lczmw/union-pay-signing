@@ -48,6 +48,14 @@ export default {
   mounted() {
   },
   methods: {
+    init() {
+      this.initPageData();
+    },
+    initPageData() {
+       let { trans_amt, verify_code } = this.globalMixin_getSigning()
+        this.transAmt = trans_amt;
+        this.verifyCode =  verify_code;
+    },
     onNavClick(index) {
       this.mainActiveIndex = index;
     },

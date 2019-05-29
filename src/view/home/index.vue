@@ -59,7 +59,7 @@
       <div v-show="active==3" class="step3 mt10">
         <step-three
           ref="step3" :footerHS="footerHS"
-          @showAuth="showAuth=true" @nextPage="nextPage" @goBack="goBack"></step-three>
+          @showAuth="showAuth=true;$refs.auth.init()" @nextPage="nextPage" @goBack="goBack"></step-three>
       </div>
     <!--   <div v-show="active==4">
         <footer>
@@ -83,7 +83,7 @@
     </div>
     <Agreement v-show="showAgree" @hideAgree="showAgree=false"></Agreement>
     <Industry v-show="showIndustry" @hideIndustry="hideIndustry"></Industry>
-    <Auth v-show="showAuth" @hideAuth="hideAuth" @on-success="onAuthSuccess"></Auth>
+    <Auth v-show="showAuth" @hideAuth="hideAuth" @on-success="onAuthSuccess" ref='auth'></Auth>
   </div>
 </template>
 
@@ -146,10 +146,9 @@ export default {
         this.footerHS = true
       }
     },
-    active() {
-      this.init()
-      // console.log(this.active)
-    }
+    // active() {
+    //   this.init()
+    // }
   },
   methods: {
     
@@ -183,7 +182,7 @@ export default {
         }else if(this.active == 3){
           this.$refs.step3.init()
         }else if(this.active == 4){
-          window.location = signing.h5_agreement_sign_url
+          window.location.replace(signing.h5_agreement_sign_url)
         }else if (this.active == 5) {
           if (signing.sign_step === 6 && ['00', '02', '03', '06'].includes(signing.apply_status) ) {
             window.location.replace(signing.h5_agreement_sign_url)
@@ -242,15 +241,16 @@ export default {
     },
     onAuthSuccess(data) {
       this.globalMixin_updateSigning(data)
-      window.location = data.ressigning.h5_agreement_sign_url
+      window.location.replace(data.ressigning.h5_agreement_sign_url)
+ 
     },
     nextPage() {
-      // this.docmHeight = document.documentElement.clientHeight
       this.active++
+     
     },
     goBack() {
-      // this.docmHeight = document.documentElement.clientHeight
       this.active--;
+      this.init()
     },
     onClickLeft() {
       // Toast('返回');

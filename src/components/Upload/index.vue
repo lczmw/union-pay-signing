@@ -42,40 +42,44 @@ export default {
     }
   },
   created() {
-    let { pic_list } = this.globalMixin_getSigning();
-    let pucList = Object.prototype.toString.call(pic_list) === '[object Array]' ? pic_list : [];
-    let hasUploaded = pucList.some((item) => {
-      return item.document_type = this.documentType
-    })
-    if (hasUploaded) {
-      this.url = require('../../assect/img/hasUpload.png');
-      this.showUploadedImg = true;
-      this.uploaded = true;
-      return
-    }
 
-    switch (this.type) {
-      case '1':
-        this.url = require('../../assect/img/add.png')
-        break
-      case '2':
-        this.url = require('../../assect/img/cardFace.png')
-        break
-      case '3':
-        this.url = require('../../assect/img/cardReverse.png')
-        break
-      case '4':
-        this.url = require('../../assect/img/selfie.png')
-        break
-      default:
-        this.url = require('../../assect/img/add.png')
-    }
-
-    if (this.type == 1) {
-      this.url = require('../../assect/img/add.png')
-    }
   },
   methods: {
+    init() {
+      let { pic_list } = this.globalMixin_getSigning();
+      let pucList = Object.prototype.toString.call(pic_list) === '[object Array]' ? pic_list : [];
+    
+      let hasUploaded = pucList.some((item) => {
+        return item.document_type === this.documentType
+      })
+      if (hasUploaded) {
+        this.url = require('../../assect/img/hasUpload.png');
+        this.showUploadedImg = true;
+        this.uploaded = true;
+        return
+      }
+
+      switch (this.type) {
+        case '1':
+          this.url = require('../../assect/img/add.png')
+          break
+        case '2':
+          this.url = require('../../assect/img/cardFace.png')
+          break
+        case '3':
+          this.url = require('../../assect/img/cardReverse.png')
+          break
+        case '4':
+          this.url = require('../../assect/img/selfie.png')
+          break
+        default:
+          this.url = require('../../assect/img/add.png')
+      }
+
+      if (this.type == 1) {
+        this.url = require('../../assect/img/add.png')
+      }
+    },
     onRead(file) {
       this.url = file.content
       // console.log('sign_id',Cookies.set('sign_id'))

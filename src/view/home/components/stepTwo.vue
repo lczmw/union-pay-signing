@@ -11,7 +11,7 @@
           readonly
           @click="showBusinessType=true"
         />
-        <div v-if="businessInfo.type">
+        <div v-show="businessInfo.type">
           <van-field
             v-model="businessInfo.name"
             label="营业名称"
@@ -92,7 +92,7 @@
       </van-cell-group>
       <section
         class="home-upload"
-        v-if="businessInfo.type=='多合一营业执照' || businessInfo.type=='普通营业执照'"
+        v-show="businessInfo.type=='多合一营业执照' || businessInfo.type=='普通营业执照'"
       >
         <div class="home-upload-txt">
           营业执照
@@ -105,7 +105,7 @@
           <Upload :disabled="twoDisabled" document-type="0002" not-uploaded-tip="请上传营业执照" ref="upload0"/>
         </div>
       </section>
-      <section class="home-upload" v-if="businessInfo.type=='普通营业执照'">
+      <section class="home-upload" v-show="businessInfo.type=='普通营业执照'">
         <div class="home-upload-txt">
           税务登记证
           <span>(图片支持jpg、png、bmg格式，文件不超过2M)</span>
@@ -114,7 +114,7 @@
           <Upload :disabled="twoDisabled" document-type="0003" not-uploaded-tip="请上传税务登记证" ref="upload1"/>
         </div>
       </section>
-      <section class="home-upload" v-if="businessInfo.type=='普通营业执照'">
+      <section class="home-upload" v-show="businessInfo.type=='普通营业执照'">
         <div class="home-upload-txt">
           组织机构代码证
           <span>(图片支持jpg、png、bmg格式，文件不超过2M)</span>
@@ -123,7 +123,7 @@
           <Upload :disabled="twoDisabled" document-type="0004" not-uploaded-tip="请上传组织机构代码证" ref="upload2"/>
         </div>
       </section>
-      <section class="home-upload" v-if="businessInfo.type">
+      <section class="home-upload" v-show="businessInfo.type">
         <div class="home-upload-txt">
           营业场所照片
           <span>(图一请上传店外照片，图二请上传店内照片，图片支持jpg、png、bmg格式，文件不超过2M)</span>
@@ -133,7 +133,7 @@
           <Upload :disabled="twoDisabled" document-type="0015" not-uploaded-tip="请上传店内照片" ref="upload4"/>
         </div>
       </section>
-      <section class="home-upload" v-if="businessInfo.type">
+      <section class="home-upload" v-show="businessInfo.type">
         <div class="home-upload-txt">
           辅助证明材料
           <span>(选填，图片支持jpg、png、bmg格式，文件不超过2M)</span>
@@ -146,7 +146,7 @@
           <Upload :disabled="twoDisabled" document-type="0014"/>
         </div>
       </section>
-      <ul class="home-tip" v-if="businessInfo.type">
+      <ul class="home-tip" v-show="businessInfo.type">
         <li>
           <span class="dot">●</span>辅助证明材料: 包括但不限于营业场所租赁协议或者产权证明、集中经营场所管理方出具的证明文件等能够反映小微商户真实、合法从事商品或服务交易活动的材料。
         </li>
@@ -154,7 +154,7 @@
           <span class="dot">●</span>最多可上传三张图片
         </li>
       </ul>
-      <div class="step2-tip" v-if="!businessInfo.type">
+      <div class="step2-tip" v-show="!businessInfo.type">
         <img class="step2-demo" src="../../../assect/img/demo.png">
         <img class="step2-arrow" src="../../../assect/img/line-arrow.png">
         <p>请选择营业执照类型</p>
@@ -239,9 +239,13 @@ export default {
       shop: {}
     }
   },
-  created() {
+  mounted() {
 
-    let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
+   
+  },
+  methods: {
+    initPageData() {
+      let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
 
 
     this.businessInfo.index = license_type;
@@ -255,10 +259,10 @@ export default {
     this.businessInfo.moreAddr = shop_addr_ext;
     this.industryCode = mccCode;
     this.businessInfo.code = shop_lic;
-  },
-  methods: {
+    },
     init() {
-      // console.log('22222222222')
+      this.initPageData();
+      this.initUploadStatus();
     },
     onConfirm(value, index) {
       console.log(index)
@@ -354,7 +358,13 @@ export default {
         return this.$refs[`upload${ item }`].hasUploaded() === false;
       })
       return !notUploaded;
-    }
+    },
+    initUploadStatus() {
+      
+       ['0', '1', '2', '3', '4'].forEach((item) => {
+        this.$refs[`upload${ item }`].init();
+      })
+    },
   }
 }
 </script>
