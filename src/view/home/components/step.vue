@@ -59,38 +59,42 @@
       v-model="popShow1"
       position="bottom"
     >
-      <van-checkbox-group v-model="needOpenPospalAccounts">
-        <van-cell-group>
-          <van-cell
-            v-for="(item, index) in accountList"
-            clickable
-            :key="item"
-            :title="item"
-            @click="toggle('checkboxes1')(index)"
-          >
-            <van-checkbox :name="item" ref="checkboxes1" />
-          </van-cell>
-        </van-cell-group>
-      </van-checkbox-group>
+      <div class="popup-inner">
+        <van-checkbox-group v-model="needOpenPospalAccounts">
+          <van-cell-group>
+            <van-cell
+              v-for="(item, index) in accountList"
+              clickable
+              :key="item"
+              :title="item"
+              @click="toggle('checkboxes1')(index)"
+            >
+              <van-checkbox :name="item" ref="checkboxes1" />
+            </van-cell>
+          </van-cell-group>
+        </van-checkbox-group>
+      </div>
     </van-popup>
 
      <van-popup 
       v-model="popShow2"
       position="bottom"
     >
-      <van-checkbox-group v-model="field3">
-        <van-cell-group>
-          <van-cell
-            v-for="(item, index) in columns1"
-            clickable
-            :key="item"
-            :title="item"
-            @click="toggle('checkboxes2')(index)"
-          >
-            <van-checkbox :name="item" ref="checkboxes2" />
-          </van-cell>
-        </van-cell-group>
-      </van-checkbox-group>
+      <div class="popup-inner">
+        <van-checkbox-group v-model="field3">
+          <van-cell-group>
+            <van-cell
+              v-for="(item, index) in columns1"
+              clickable
+              :key="item"
+              :title="item"
+              @click="toggle('checkboxes2')(index)"
+            >
+              <van-checkbox :name="item" ref="checkboxes2" />
+            </van-cell>
+          </van-cell-group>
+        </van-checkbox-group>
+      </div>
 
       
     </van-popup>
@@ -297,5 +301,8 @@ export default {
       vertical-align: middle;
     }
   }
+}
+.popup-inner{
+  max-height: 300px;
 }
 </style>

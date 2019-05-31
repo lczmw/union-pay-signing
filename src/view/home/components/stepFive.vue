@@ -113,9 +113,9 @@
       </p>
       <p class="red">审核结果将以短信通知，您也可以通过拨打95534客服热线查询。协议自审核通过之日起生效。</p>
     </div> -->
-    <footer v-if="signing.apply_status !== '03'">
+   <!--  <footer v-if="signing.apply_status !== '03'">
       <van-button type="primary" size="large" @click="reapply">重新申请</van-button>
-    </footer>
+    </footer> -->
   </div>
 </template>
 
