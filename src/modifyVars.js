@@ -5,7 +5,7 @@ module.exports = {
   'button-info-color': '#1A76E0',
   'text-color': '#333',
   'border-color': '#EDEFF1',
-  'active-color': '#1A76E0',
+  'active-color': '#f2f3f5',
   'background-color': '#F5F5F5',
   'nav-bar-background-color': '#1A76E0',
   'nav-bar-icon-color': '#fff',

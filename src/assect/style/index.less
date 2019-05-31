@@ -46,3 +46,28 @@
     }
   }
 }
+
+
+.c-flex-page{
+   display: flex; flex-direction: column;
+    > div, > header{
+        flex: none;
+    }
+    .c-flex-content{
+    flex: auto;height: 100%;overflow: auto;
+}
+}
+
+
+.c-float-btn{
+    position: fixed;bottom: 40px;left: 50%;transform: translate(-50%);
+}
+.c-float-btn__inner{
+    display: inline-block;background: #0088DD;box-shadow: 0 2px 7px 0 rgba(0,136,221,0.40);border-radius: 18px;padding: 8px 17px;
+}
+.c-float-btn__text{
+    vertical-align: middle;font-size: 15px;color: #FFFFFF;
+}
+.c-float-btn__icon{
+    width: 16px;height: 16px;margin-right: 2px;vertical-align: middle;
+}

@@ -265,7 +265,7 @@ export default {
       this.initUploadStatus();
     },
     onConfirm(value, index) {
-      console.log(index)
+   
       this.showBusinessType = false
       // this.$toast(`当前值：${value}, 当前索引：${index}`);
       this.businessInfo.type = value
@@ -343,7 +343,8 @@ export default {
         }
         
         setBusinessInfo(params)
-        .then(() => {
+        .then(({ result }) => {
+          this.globalMixin_updateSigning(result)
            this.$emit('nextPage')
         })
         .catch(() => {})

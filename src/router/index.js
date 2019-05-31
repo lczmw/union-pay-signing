@@ -19,7 +19,7 @@ const routes = [
     name: 'home',
     component: () => import('../view/home'),
     meta: {
-      title: '首页'
+      title: '自助签约'
     }
   },
   {
@@ -47,7 +47,7 @@ const routes = [
     name: 'signlist',
     component: () => import('../view/signlist'),
     meta: {
-      title: '签约列表'
+      title: ''
     }
   }
 ];

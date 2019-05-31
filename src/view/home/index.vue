@@ -2,7 +2,7 @@
   <div>
     <div v-show="!showAgree&&!showIndustry&&!showAuth" :class="active==5?'home-wrapper white':'home-wrapper'">
       <header>
-        <van-nav-bar title="商户自助签约" :left-arrow="active!=-1" @click-left="$router.go(-1)"/>
+        <van-nav-bar title="商户自助签约" left-arrow @click-left="$router.go(-1)"/>
       </header>
       <van-steps :active="active" active-color="#1A76E0">
         <!-- <van-step>银豹账号</van-step> -->
@@ -99,7 +99,7 @@ import stepOne from './components/stepOne'
 import stepTwo from './components/stepTwo'
 import stepThree from './components/stepThree'
 import stepFive from './components/stepFive'
-import { verifyPospalAccount } from '@/api'
+import { GetSignDetail } from '@/api'
 export default {
   components: {
     Agreement,
@@ -152,43 +152,47 @@ export default {
   },
   methods: {
     
-    verifyPospalAccount() {
-      verifyPospalAccount(
-        { pospal_account: Cookies.get('account')},
+    getDetail() {
+      GetSignDetail(
+        { sign_id: Cookies.get('sign_id')},
         { isShowError: false }
       ).then(({ result }) => {
-        Cookies.set('sign_step', result.signing.sign_step || 0);
-        Cookies.set('sign_id', result.signing.id);
-        let step = result.signing.sign_step > 3 ? result.signing.sign_step - 1 : result.signing.sign_step;
+      
+        let step = result.sign_step > 3 ? result.sign_step - 1 : result.sign_step;
         this.active =  step || 0
-
-        this.globalMixin_updateSigning(result.signing)
-        this.init(result.signing)
+        this.globalMixin_updateSigning(result)
+        this.init(result)
       })
       .catch(() => {
+          this.$router.go(-1);
           removeStore('pospal_signing')
-          this.$router.replace('/')
+      
       })
     },
     init(signing = {}) {
-
+     
       this.$nextTick(function() {
+        this.$refs.step0.init()
+        this.$refs.step1.init()
+        this.$refs.step2.init()
+        this.$refs.step3.init()
         if(this.active == 0){
-          this.$refs.step0.init()
+          // this.$refs.step0.init()
         }else if(this.active == 1){
-          this.$refs.step1.init()
+          // this.$refs.step1.init()
         }else if(this.active == 2){
-          this.$refs.step2.init()
+          // this.$refs.step2.init()
         }else if(this.active == 3){
-          this.$refs.step3.init()
+          // this.$refs.step3.init()
         }else if(this.active == 4){
           window.location.replace(signing.h5_agreement_sign_url)
         }else if (this.active == 5) {
-          if (signing.sign_step === 6 && ['00', '02', '03', '06'].includes(signing.apply_status) ) {
-            window.location.replace(signing.h5_agreement_sign_url)
-          }else {
-            this.$refs.step5.init()
-          }
+          // if (signing.sign_step === 6 && ['00', '02', '03', '06'].includes(signing.apply_status) ) {
+          //   window.location.replace(signing.h5_agreement_sign_url)
+          // }else {
+          //   this.$refs.step5.init()
+          // }
+          this.$refs.step5.init()
         }
       })
     },
@@ -205,17 +209,11 @@ export default {
     },
     onFocus(key) {
       this.realError[key] = false
-      // this.detailFocused = key === 'addressDetail';
-      // this.$emit('focus', key);
+  
     },
     getRealError(key) {
       const value = String(this.realName[key] || '').trim();
-      // if (this.validator) {
-      //   const message = this.validator(key, value);
-      //   if (message) {
-      //     return message;
-      //   }
-      // }
+   
       switch (key) {
         case 'name':
           return value ? '' : '姓名不为空';
@@ -227,7 +225,6 @@ export default {
           return value ? '' : '邮箱不为空';
         case 'idCard':
           return value ? '' : '身份证号不为空';
-        // return value && !/^\d{6}$/.test(value) ? t('postalEmpty') : '';
       }
     },
     hideIndustry(activeId = '', activeText = '') {
@@ -246,24 +243,24 @@ export default {
     },
     nextPage() {
       this.active++
-     
+      
     },
     goBack() {
       this.active--;
       this.init()
     },
     onClickLeft() {
-      // Toast('返回');
+  
     },
     onRead(file) {
-      // console.log(file)
+     
     },
     onReapply() {
-      this.verifyPospalAccount()
+      this.getDetail()
     }
   },
   created() {
-    this.verifyPospalAccount()
+    this.getDetail()
   },
 }
 </script>

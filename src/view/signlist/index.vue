@@ -1,10 +1,10 @@
 <template>
-	<div class="sort-page">
+	<div class="sort-page c-flex-page">
 		<header>
-	      <van-nav-bar title="签约列表" :left-arrow="canBack" @click-left="onClickLeft"/>
+	      <van-nav-bar :title="title" :left-arrow="canBack" @click-left="onClickLeft"/>
 	    </header>
 		
-		<div class="van-search__inner">
+		<div class="van-search__inner" v-if="type ==='1'">
 			<van-search 
 				placeholder="请输入账号关键字" 
 				v-model="key" 
@@ -16,16 +16,16 @@
 		<van-list
 			v-model="loading"
 			:finished="finished"
-			finished-text="没有更多了"
+			finished-text="没有更多数据了"
   			@load="onLoad"
   			
-  			class="sign-list"
+  			class="c-flex-content"
 		>
 			<div class="sign-item" 
 				v-for="(item, index) in list"
 				@click="handleSignItemClick(item)"
 			>
-				<div class="sign-item__header">
+				<div class="sign-item__header" v-if="type === '1'">
 					<div class="sign-item__header-lf">银豹账号</div>
 					<div class="sign-item__header-rt">{{ item.pospal_account }}</div>
 					
@@ -55,11 +55,22 @@
 				
 			</div>
 		</van-list>
+
+
+
+		<div class="c-float-btn" v-if="type === '2'" @click="addSign">
+			<div class="c-float-btn__inner">
+				<img src="@/assect/img/add_02@3x.png" class="c-float-btn__icon">
+				<span class="c-float-btn__text">
+					新增签约
+				</span>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-import { querySignRecords } from '@/api'
+import { QuerySignRecords, NewSign } from '@/api'
 import { List, Search } from 'vant';
 import Cookies from 'js-cookie'
 export default {
@@ -76,40 +87,57 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			key: '',
+			title: '',
+		}
+	},
+
+	computed: {
+		type() {
+			return this.$route.query.type || '1'
 		}
 	},
 
 	methods: {
-		onLoad() {
-			querySignRecords({
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
-				key: this.key,
+		addSign() {
+			NewSign({
+				pospal_account: Cookies.get('account')
 			})
 			.then(({ result }) => {
+				Cookies.set('sign_id', result.id)
+				this.$router.push('/home')
+			})
+			.catch(() => {
+
+			})
+		},
+		onLoad() {
+			this.loadData();
+		},
+		loadData() {
+			this.loading = true;
+			let params = this.getParams();
+			QuerySignRecords(params)
+			.then(({ result }) => {
 				this.loading = false;
-				if (result.length === 0) {
+				if (result.length === 0 || this.type === '2') {
 					this.finished = true;
 				}
 				this.pageIndex += 1;
 				this.list.push(...result)
 			})
 		},
-		loadData() {
-			this.loading = true;
-			querySignRecords({
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
-				key: this.key,
-			})
-			.then(({ result }) => {
-				this.loading = false;
-				if (result.length === 0) {
-					this.finished = true;
+		getParams() {
+			let map = {
+				'1': {
+					pageIndex: this.pageIndex,
+					pageSize: this.pageSize,
+					key: this.key,
+				},
+				'2': {
+					pospal_account: Cookies.get('account')
 				}
-				this.pageIndex += 1;
-				this.list.push(...result)
-			})
+			}
+			return map[this.type]
 		},
 		initQuery() {
 			this.pageIndex = 1;
@@ -142,8 +170,8 @@ export default {
 			let v = stepMap[step];
 			return typeof v !== 'undefined' ? v : ''
 		},
-		handleSignItemClick({ pospal_account }) {
-			Cookies.set('account', pospal_account)
+		handleSignItemClick({ id }) {
+			Cookies.set('sign_id', id)
 			this.$router.push('/home')
 		}
 	},
@@ -151,6 +179,19 @@ export default {
 	created () {
 
 	},
+
+	mounted() {
+		let account = Cookies.get('account');
+
+		if (this.type === '1') {
+			this.title = '签约列表'
+			document.title = '签约列表'
+		}else if (this.type === '2') {
+			let title = `${account}的签约列表`
+			this.title = title
+			document.title = title
+		}
+	}
 }
 </script>
 

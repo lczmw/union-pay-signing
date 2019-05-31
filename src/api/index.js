@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-import Cookies from 'js-cookie'
 // 验证银豹账号
 export function verifyPospalAccount(data, options = {}) {
   return request({
@@ -70,14 +69,6 @@ export function companyAccountVerify(data) {
   }) 
 }
 
-// 签约列表
-export function querySignRecords(data) {
-  return request({
-    url: 'UnionPaySigning/QuerySignRecords',
-    method: 'post',
-    data
-  }) 
-}
 
 // 重新申请
 export function reSgin(data) {
@@ -87,3 +78,25 @@ export function reSgin(data) {
     data
   }) 
 }
+
+// 按账号查询签约记录
+export const QuerySignRecords = (data) => request({
+    url: 'UnionPaySigning/QuerySignRecords',
+    method: 'post',
+    data
+}) 
+
+// 获取签约详情
+export const GetSignDetail = (data) => request({
+    url: 'UnionPaySigning/GetSignDetail',
+    method: 'post',
+    data
+}) 
+
+// 新建签约
+export const NewSign = (data) => request({
+    url: 'UnionPaySigning/NewSign',
+    method: 'post',
+    data
+}) 
+

@@ -29,7 +29,7 @@
 
 <script>
 import Cookies from 'js-cookie'
-import { verifyPospalAccount } from '@/api'
+import { QuerySignRecords } from '@/api'
 export default {
   data() {
     return {
@@ -77,23 +77,17 @@ export default {
       return this.account ? '' : '账号不为空';
     },
     verifyPospalAccount() {
-      verifyPospalAccount({
+      QuerySignRecords({
         pospal_account: this.account
       }).then(res => {
         
-        Cookies.set('sign_step', res.result.signing.sign_step || 0);
-        Cookies.set('sign_id', res.result.signing.id);
         Cookies.set('account', this.account);
-        this.$router.push('/home')
+        this.$router.push('/signlist?type=2')
       })
     },
     onFocus() {
       this.errorAccount = false
     },
-
-    gotoHome() {
-      this.$router.push('/home')
-    }
   }
 }
 </script>

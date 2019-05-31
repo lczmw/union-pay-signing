@@ -222,7 +222,6 @@ export default {
     },
     init() {
       let signing = getStore('pospal_signing', true);
-      this.signing = signing;
       if (signing.sign_step === 4) {
         this.accountName.type = 2;
         this.showAuth();
@@ -232,6 +231,7 @@ export default {
       this.initUploadStatus();
     },
     initPageData() {
+      
        let { bank_acct_type, bank_acct_no, bank_branch_name, bank_no, bank_acct_name } = this.globalMixin_getSigning()
         this.accountName.type = ~~bank_acct_type + 1;
         this.accountName.name =  bank_acct_no;
@@ -268,7 +268,7 @@ export default {
         'bank_acct_no': this.accountName.name,
         'bank_branch_name': this.accountName.branchName,
         'bank_no': this.accountName.branchCode,
-        'bank_acct_name': this.accountName.type === 2 ? this.accountName.openName : this.signing.legal_name
+        'bank_acct_name': this.accountName.type === 2 ? this.accountName.openName : getStore('pospal_signing', true).legal_name
       }
 
       return params
@@ -296,22 +296,25 @@ export default {
         'bank_no': '请选择所属支行',
         'bank_acct_name': '请填写开户名称',
       }
+
       this.globalMixin_validFormEmpty(validField, params)
       .then(() => {
 
         if (!this.isImagesListUploaded()) {
           return
         }
+
         setBankInfo(params)
         .then(({ result }) => {
-
+         
           this.globalMixin_updateSigning(result)
            if (result.sign_step === 4) {
             this.showAuth();
-           } else if (result.sign_step === 5) {} {
+           } else if (result.sign_step === 5) {
              window.location = result.h5_agreement_sign_url
            }
         })
+
         .catch(() => {})
       })
       .catch(() => {
