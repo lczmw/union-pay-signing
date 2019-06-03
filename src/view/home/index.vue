@@ -238,8 +238,7 @@ export default {
     },
     onAuthSuccess(data) {
       this.globalMixin_updateSigning(data)
-      window.location.replace(data.ressigning.h5_agreement_sign_url)
- 
+      window.location.replace(data.h5_agreement_sign_url)
     },
     nextPage() {
       this.active++
