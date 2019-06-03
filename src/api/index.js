@@ -100,3 +100,10 @@ export const NewSign = (data) => request({
     data
 }) 
 
+
+export const RequestAccountVerify = (data) => request({
+    url: 'UnionPaySigning/RequestAccountVerify',
+    method: 'post',
+    data
+}) 
+
