@@ -25,9 +25,26 @@
 				v-for="(item, index) in list"
 				@click="handleSignItemClick(item)"
 			>
-				<div class="sign-item__header" v-if="type === '1'">
-					<div class="sign-item__header-lf">银豹账号</div>
-					<div class="sign-item__header-rt">{{ item.pospal_account }}</div>
+				<div class="sign-item__header" v-if="type === '1'" @click.stop>
+					<div class="sign-item__header-item is-auto">
+						<div class="sign-item__header-key">银豹账号</div>
+						<div class="sign-item__header-value ellipsis">{{ item.pospal_account }}</div>
+					</div>
+					
+				
+					<div class="sign-item__header-item" @click="handleRadioClick(item)" v-if="item.apply_status_msg === '入网成功'">
+						<div v-show="item.config_status_done === false">
+							<van-loading type="spinner" size="20px"></van-loading>
+						</div>
+						<div class="sign-item__row-key">是否配置</div>
+						<div class="sign-item__row-value">
+							<van-radio-group v-model="item.config_status">
+							  <van-radio :name="1"></van-radio>
+							</van-radio-group>
+						</div>
+						
+				
+					</div>
 					
 				</div>
 				<div class="sign-item__content">
@@ -52,6 +69,7 @@
 						<div class="sign-item__row-value is-red">{{ item.fail_reason }}</div>
 					</div>
 				</div>
+			
 				
 			</div>
 		</van-list>
@@ -66,17 +84,53 @@
 				</span>
 			</div>
 		</div>
+
+		<div class="c-float-btn" v-if="type === '1'" @click="exportRecord">
+			<div class="c-float-btn__inner">
+				<span class="c-float-btn__text">
+					导出记录
+				</span>
+				<img src="@/assect/img/upload.png" class="upload__icon">
+			</div>
+		</div>
+
+
+		  <van-popup 
+		      v-model="popShow1"
+		      position="bottom"
+		    >
+		      <div class="popup-inner">
+		     
+		          <van-cell-group>
+		            <van-cell
+		              v-for="(item, index) in columns1"
+		              clickable
+		              :key="index"
+		              :title="item.name"
+		              @click="handlePopItemClick(item)"
+		            >
+		           	
+		            </van-cell>
+		          </van-cell-group>
+		      
+		      </div>
+
+		      
+		    </van-popup>
 	</div>
 </template>
 
 <script>
-import { QuerySignRecords, NewSign } from '@/api'
-import { List, Search } from 'vant';
+import { QuerySignRecords, NewSign, UpdateConfigStatu, Export } from '@/api'
+import { List, Search, Radio, RadioGroup, Loading } from 'vant';
 import Cookies from 'js-cookie'
 export default {
 	components: {
 		VanList: List,
 		VanSearch: Search,
+		VanRadio: Radio,
+		VanRadioGroup: RadioGroup,
+		VanLoading: Loading,
 	},
 	data () {
 		return {
@@ -88,6 +142,16 @@ export default {
 			pageSize: 10,
 			key: '',
 			title: '',
+
+			radio: [],
+			popShow1: false,
+			columns1: [{
+				name: '导出未配置',
+				status: 0,
+			},{
+				name: '导出已配置',
+				status: 1,
+			}]
 		}
 	},
 
@@ -98,6 +162,32 @@ export default {
 	},
 
 	methods: {
+		handleRadioClick(item) {
+			item.config_status_done = false;
+			
+			let status = item.config_status === 0 ? 1 : 0;
+			UpdateConfigStatu({
+				sign_id: item.id,
+				config_status: status
+			})
+			.then(({ result }) => {
+				item.config_status = result.config_status
+			})
+			.catch(() => {
+
+			})
+			.finally(() => {
+				item.config_status_done = true;
+			})
+	
+		},
+		handlePopItemClick({ status }) {
+			if (!window.location.origin) {
+			  window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+			}
+			window.location = `${window.location.origin}/wxapi/UnionPaySigning/Export?config_status=${ status }`;
+			// window.open(`${window.location.origin}/wxapi/UnionPaySigning/Export?config_status=${ status }`, '_blank');
+		},
 		addSign() {
 			NewSign({
 				pospal_account: Cookies.get('account')
@@ -123,9 +213,17 @@ export default {
 					this.finished = true;
 				}
 				this.pageIndex += 1;
+				result.forEach((item) => {
+					item.config_status_done = true;
+				})
 				this.list.push(...result)
 			})
 		},
+		toggle(name) {
+	      return (index) => {
+	        this.$refs[name][index].toggle();
+	      }
+	    },
 		getParams() {
 			let map = {
 				'1': {
@@ -173,7 +271,10 @@ export default {
 		handleSignItemClick({ id }) {
 			Cookies.set('sign_id', id)
 			this.$router.push('/home')
-		}
+		},
+		exportRecord() {
+			this.popShow1 = true;
+		},
 	},
 
 	created () {
@@ -195,12 +296,21 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style  lang="less" scoped>
 	.sort-page{
 		height: 100%;background-color: #f8f8f8;overflow: hidden;
 	}
 	.sign-list{
 		height: calc(100% - 98px); overflow: auto;
+	}
+	.sign-item__header-item{
+		display: flex;
+	    align-items: center;
+	    flex: none;
+	    &.is-auto{
+	    	flex: auto;
+	    	min-width: 0;
+	    }
 	}
 	.sign-item{
 		margin-bottom: 8px;background-color: #fff;
@@ -208,29 +318,28 @@ export default {
 	.sign-item__header{
 		display: flex;
 	    align-items: center;
-	
+		justify-content: space-between;
 	    height: 54px;
 	    border-bottom: 1px solid #f2f2f2;
 	    padding: 0 15px;
 	}
-	.sign-item__header-lf{
+	.sign-item__header-key{
+		flex: none;
 		color: #353535;
     	font-weight: 600;
     	font-size: 15px;
     	margin-right: 15px;
 	}
-	.sign-item__header-rt{
+	.sign-item__header-value{
 	    font-size: 15px;
 		color: #353535;
+		flex: auto;
 	}
 	.sign-item__content{
 		padding: 10px 15px;
 	}
 	.sign-item__row{
-		display: flex;
-    
-    	align-items: center;
-    
+		display: flex;    
     	padding-bottom: 10px;
 	}
 	.sign-item__row-key{
@@ -246,8 +355,20 @@ export default {
 			color: #ff5556;
 		}
 	}
+	.sign-item__footer{
+		padding: 0 15px;
+		.sign-item__row{
+			align-items: center
+		}
+	}
 
 .van-search__inner{
 		margin-bottom: 1px;
+	}
+
+	.upload__icon{
+		width: 20px;
+		height: 18px;
+		vertical-align: middle;
 	}
 </style>

@@ -107,3 +107,18 @@ export const RequestAccountVerify = (data) => request({
     data
 }) 
 
+// 更新配置状态接口
+export const UpdateConfigStatu = (data) => request({
+    url: 'UnionPaySigning/UpdateConfigStatus',
+    method: 'post',
+    data
+})
+
+// 导出签约记录
+export const Export = (params) => request({
+    url: 'UnionPaySigning/Export',
+    method: 'get',
+    params
+}) 
+
+
