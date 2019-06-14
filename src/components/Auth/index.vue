@@ -89,7 +89,7 @@ export default {
       })
     },
     clickSure() {
-      console.log(typeof this.transAmt)
+    
       let params = this.getParams()
       let validField = {
         'trans_amt': { re: /^[0-9]*[1-9][0-9]*$/, emptyMsg: '请填写入账金额', reMsg: '入账金额必须为正整数' },
