@@ -10,7 +10,7 @@ module.exports = {
 
   devServer: {
     port: port,
-    open: true,
+    open: false,
     // overlay: {
     //   warnings: false,
     //   errors: true
@@ -35,6 +35,7 @@ module.exports = {
       addStyleResource(config.module.rule('less').oneOf(type))
     )
   },
+  lintOnSave: false,
   css: {
     loaderOptions: {
       postcss: {

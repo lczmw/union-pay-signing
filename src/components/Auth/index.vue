@@ -4,7 +4,7 @@
       <van-nav-bar title="对公账户认证" left-arrow @click-left="hideAuth"/>
     </header>
     <van-cell-group>
-      <van-field v-model="transAmt" label="入账金额" placeholder="请输入金额（单位：分）"/>
+      <van-field v-model="transAmt" label="入账金额" placeholder="请输入金额（单位：分）" type="number"/>
       <van-field v-model="verifyCode" label="备注验证码" placeholder="银行入账交易备注的6位验证码" type="number"/>
     </van-cell-group>
     <ul class="home-tip" style="margin-bottom: 20px">
@@ -89,10 +89,11 @@ export default {
       })
     },
     clickSure() {
+      console.log(typeof this.transAmt)
       let params = this.getParams()
       let validField = {
-        'trans_amt': '请输入入账金额',
-        'verify_code': '请输入备注验证码',
+        'trans_amt': { re: /^[0-9]*[1-9][0-9]*$/, emptyMsg: '请填写入账金额', reMsg: '入账金额必须为正整数' },
+        'verify_code': '请填写备注验证码',
       }
       this.globalMixin_validFormEmpty(validField, params)
       .then(() => {
