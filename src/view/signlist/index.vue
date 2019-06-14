@@ -38,7 +38,7 @@
 						</div>
 						<div class="sign-item__row-key">是否配置</div>
 						<div class="sign-item__row-value">
-							<van-radio-group v-model="item.config_status">
+							<van-radio-group v-model="item.config_status" disabled>
 							  <van-radio :name="1"></van-radio>
 							</van-radio-group>
 						</div>
@@ -370,5 +370,20 @@ export default {
 		width: 20px;
 		height: 18px;
 		vertical-align: middle;
+	}
+</style>
+
+<style type="text/css">
+
+	
+	.van-radio__icon--disabled .van-icon{
+		border-color: #e5e5e5;
+		background-color: transparent;
+	}
+
+	.van-radio__icon--disabled.van-radio__icon--checked .van-icon{
+		    border-color: #1A76E0;
+    	background-color: #1A76E0;
+    	color: #fff;
 	}
 </style>
