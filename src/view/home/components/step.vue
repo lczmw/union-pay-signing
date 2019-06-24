@@ -1,7 +1,7 @@
 <template>
   <div :class="footerHS?'fixedFooter':''">
     <div class="stepThree mt10">
-  
+
       <van-cell-group>
         <van-field
           right-icon="arrow"
@@ -19,7 +19,7 @@
         <van-field
           v-model="feeRate"
           label="费率"
-          placeholder="不低于0.25"
+          placeholder="0.25至1.00之间"
           autosize
           type="number"
           :error="accountError.account"
@@ -30,7 +30,7 @@
           label="产品类型"
           placeholder="请选择产品类型(可多选)"
           right-icon="arrow"
-          readonly 
+          readonly
           @click.native="popShow2 = true"
         />
         <van-field
@@ -52,10 +52,14 @@
       </van-cell-group>
     </div>
     <footer :style="footerHS?'':'position:relative'">
-      <van-button type="primary" size="large" @click="nextPage">下一步</van-button>
+      <van-button
+        type="primary"
+        size="large"
+        @click="nextPage"
+      >下一步</van-button>
     </footer>
 
-    <van-popup 
+    <van-popup
       v-model="popShow1"
       position="bottom"
     >
@@ -69,14 +73,17 @@
               :title="item"
               @click="toggle('checkboxes1')(index)"
             >
-              <van-checkbox :name="item" ref="checkboxes1" />
+              <van-checkbox
+                :name="item"
+                ref="checkboxes1"
+              />
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
       </div>
     </van-popup>
 
-     <van-popup 
+    <van-popup
       v-model="popShow2"
       position="bottom"
     >
@@ -90,33 +97,40 @@
               :title="item"
               @click="toggle('checkboxes2')(index)"
             >
-              <van-checkbox :name="item" ref="checkboxes2" />
+              <van-checkbox
+                :name="item"
+                ref="checkboxes2"
+              />
             </van-cell>
           </van-cell-group>
         </van-checkbox-group>
       </div>
 
-      
     </van-popup>
 
-     <van-popup 
+    <van-popup
       v-model="popShow3"
       position="bottom"
     >
-      <van-picker :columns="columns2" show-toolbar @confirm="onPickerConfirm2" @cancel="popShow3 = false"/>
+      <van-picker
+        :columns="columns2"
+        show-toolbar
+        @confirm="onPickerConfirm2"
+        @cancel="popShow3 = false"
+      />
     </van-popup>
   </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import Area from '@/components/Area'
-import Upload from '@/components/Upload'
-import { setBasicInfo } from '@/api'
+import Cookies from 'js-cookie';
+import Area from '@/components/Area';
+import Upload from '@/components/Upload';
+import { setBasicInfo } from '@/api';
 export default {
   components: {
     Area,
-    Upload,
+    Upload
   },
   props: {
     footerHS: true
@@ -150,57 +164,57 @@ export default {
       field4: '',
       field5: '',
       columns1: ['B扫C', 'C扫B'],
-      columns2: ['收银机', '公众号支付', '小程序支付'],
-
-    }
+      columns2: ['收银机', '公众号支付', '小程序支付']
+    };
   },
   computed: {
     isField4Show() {
-      return this.field3.includes('C扫B')
+      return this.field3.includes('C扫B');
     },
     isField5Show() {
-      return this.field3.includes('C扫B') && ['公众号支付', '小程序支付'].includes(this.field4)
+      return (
+        this.field3.includes('C扫B') &&
+        ['公众号支付', '小程序支付'].includes(this.field4)
+      );
     }
   },
   methods: {
-    onChange() {
-
-    },
+    onChange() {},
     onPickerConfirm1(data) {
       this.field3 = data;
-      this.popShow2 = false
+      this.popShow2 = false;
     },
     onPickerConfirm2(data) {
       this.field4 = data;
-      this.popShow3 = false
+      this.popShow3 = false;
     },
     toggle(name) {
-      return (index) => {
+      return index => {
         this.$refs[name][index].toggle();
-      }
+      };
     },
     handleAccountClick() {
-      this.accountPopShow = true
+      this.accountPopShow = true;
     },
     init() {
       this.initPageData();
     },
     showAreaFun() {
-      this.showArea = true
+      this.showArea = true;
     },
     hideArea() {
-      this.showArea = false
+      this.showArea = false;
     },
     onRead(file) {
-      console.log(file)
+      console.log(file);
     },
     confirmArea(data) {
-      this.showArea = false
-      this.accountName.country = data[2].code
-      this.accountName.addr = data[0].name + data[1].name + data[2].name
+      this.showArea = false;
+      this.accountName.country = data[2].code;
+      this.accountName.addr = data[0].name + data[1].name + data[2].name;
     },
     goBack() {
-      this.$emit('goBack')
+      this.$emit('goBack');
     },
     getParams() {
       let csbType = this.columns2.indexOf(this.field4);
@@ -214,46 +228,48 @@ export default {
         product_csb_type: csbType === -1 ? '' : csbType,
         product_csb_remark: this.field5,
         productType: this.field3
-      }
+      };
 
-      return params
+      return params;
     },
     nextPage() {
-      let params = this.getParams()
+      let params = this.getParams();
 
       let validField = {
-        'need_open_pospal_accounts': '请填写门店账号',
-        'fee_rate': '请填写费率',
-        'productType': '请选择产品类型',
-      }
+        need_open_pospal_accounts: '请填写门店账号',
+        fee_rate: '请填写费率',
+        productType: '请选择产品类型'
+      };
 
       if (this.field3.includes('C扫B')) {
-        validField['product_csb_type'] = '请选择应用场景'
+        validField['product_csb_type'] = '请选择应用场景';
       }
 
-      
       this.globalMixin_validFormEmpty(validField, params)
-      .then(() => {
-        if (this.feeRate < 0.25) {
-          this.$toast({
-              message: '费率最低为0.25',
+        .then(() => {
+          if (this.feeRate < 0.25) {
+            this.$toast({
+              message: '费率不能低于0.25',
               duration: 2000
-          });
-          return 
-        }
-        delete params.productType
-        setBasicInfo(params)
-        .then(({ result }) => {
-          this.globalMixin_updateSigning(result)
-          this.$emit('nextPage')
+            });
+            return;
+          }
+          if (this.feeRate > 1) {
+            this.$toast({
+              message: '费率不能高于1.00',
+              duration: 2000
+            });
+            return;
+          }
+          delete params.productType;
+          setBasicInfo(params)
+            .then(({ result }) => {
+              this.globalMixin_updateSigning(result);
+              this.$emit('nextPage');
+            })
+            .catch(() => {});
         })
-        .catch(() => {})
-      })
-      .catch(() => {
-
-      })
-      
-     
+        .catch(() => {});
     },
     onFocus(key) {
       // this.realError[key] = false
@@ -261,35 +277,43 @@ export default {
       // this.$emit('focus', key);
     },
     initPageData() {
-     
-      this.field3 = []
-      let { fee_rate, need_open_pospal_accounts = '', all_pospal_accounts, product_bsc, product_csb, product_csb_type, product_csb_remark } = this.globalMixin_getSigning()
-      this.needOpenPospalAccounts = need_open_pospal_accounts === '' ? [] : need_open_pospal_accounts.split(',');
+      this.field3 = [];
+      let {
+        fee_rate,
+        need_open_pospal_accounts = '',
+        all_pospal_accounts,
+        product_bsc,
+        product_csb,
+        product_csb_type,
+        product_csb_remark
+      } = this.globalMixin_getSigning();
+      this.needOpenPospalAccounts =
+        need_open_pospal_accounts === ''
+          ? []
+          : need_open_pospal_accounts.split(',');
       this.feeRate = fee_rate || '';
       this.accountList = all_pospal_accounts;
- 
+
       if (product_bsc === 1) {
-        this.field3.push('B扫C')
+        this.field3.push('B扫C');
       }
       if (product_csb === 1) {
-        this.field3.push('C扫B')
+        this.field3.push('C扫B');
       }
       if (product_csb_type !== undefined) {
-        this.field4 = this.columns2[product_csb_type]
+        this.field4 = this.columns2[product_csb_type];
       }
       if (product_csb_remark !== undefined) {
-        this.field5 = product_csb_remark
+        this.field5 = product_csb_remark;
       }
     }
   },
-  mounted() {
-  
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less" scoped>
-@import "../../../assect/style/var.less";
+@import '../../../assect/style/var.less';
 .fixedFooter {
   padding-bottom: 70px;
 }
@@ -302,7 +326,7 @@ export default {
     }
   }
 }
-.popup-inner{
+.popup-inner {
   max-height: 300px;
 }
 </style>

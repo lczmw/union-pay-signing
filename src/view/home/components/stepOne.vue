@@ -29,7 +29,7 @@
           :error="realError.code"
           @focus="onFocus('tel')"
         > -->
-         <!--  <van-button
+        <!--  <van-button
             v-show="sendAuthCode"
             slot="button"
             size="small"
@@ -60,7 +60,6 @@
           :disabled="oneDisabled"
           :error="realError.idCard"
           @focus="onFocus('idCard')"
-       
         />
         <van-field
           v-model="realName.date"
@@ -78,16 +77,44 @@
           <span>(图片支持jpg、png、bmg格式，文件不超过2M)</span>
         </div>
         <div class="home-upload-content">
-          <Upload type="2" document-type="0001" :disabled="oneDisabled" not-uploaded-tip="请上传身份证头像页" ref="upload0"/>
-          <Upload type="3" document-type="0011" :disabled="oneDisabled" not-uploaded-tip="请上传身份证国徽页" ref="upload1"/>
+          <Upload
+            type="2"
+            document-type="0001"
+            :disabled="oneDisabled"
+            not-uploaded-tip="请上传身份证头像页"
+            ref="upload0"
+          />
+          <Upload
+            type="3"
+            document-type="0011"
+            :disabled="oneDisabled"
+            not-uploaded-tip="请上传身份证国徽页"
+            ref="upload1"
+          />
         </div>
       </section>
       <section class="home-agree">
-        <van-checkbox v-model="checked" :disabled="oneDisabled">我同意并已阅读</van-checkbox>
-        <span class="primaryTxt" @click="showAgreeFun">《银联商务商户自助签约知情同意书》</span>
+        <van-checkbox
+          v-model="checked"
+          :disabled="oneDisabled"
+        >我同意并已阅读</van-checkbox>
+        <span
+          class="primaryTxt"
+          @click="showAgreeFun"
+        >《银联商务商户自助签约知情同意书》</span>
       </section>
-      <van-popup v-model="showDate" position="bottom">
-        <van-datetime-picker v-model="currentDate" :max-date="maxDate" :min-date="minDate" type="date" @confirm="confirmDate" @cancel="showDate=false"/>
+      <van-popup
+        v-model="showDate"
+        position="bottom"
+      >
+        <van-datetime-picker
+          v-model="currentDate"
+          :max-date="maxDate"
+          :min-date="minDate"
+          type="date"
+          @confirm="confirmDate"
+          @cancel="showDate=false"
+        />
       </van-popup>
     </div>
     <!-- <footer :style="footerHS?'':'position:relative'">
@@ -95,18 +122,26 @@
     </footer>-->
     <footer :style="footerHS?'':'position:relative'">
       <div class="doubleBtn">
-        <van-button type="warning" size="large" @click="goBack">上一步</van-button>
-        <van-button type="primary" size="large" @click="nextPage">下一步</van-button>
+        <van-button
+          type="warning"
+          size="large"
+          @click="goBack"
+        >上一步</van-button>
+        <van-button
+          type="primary"
+          size="large"
+          @click="nextPage"
+        >下一步</van-button>
       </div>
     </footer>
   </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import Upload from '@/components/Upload'
-import { getDay } from '@/utils'
-import { setRealUserInfo } from '@/api'
+import Cookies from 'js-cookie';
+import Upload from '@/components/Upload';
+import { getDay } from '@/utils';
+import { setRealUserInfo } from '@/api';
 export default {
   // mixins: [footerShow],
   components: {
@@ -118,7 +153,7 @@ export default {
   data() {
     return {
       checked: true,
-      oneDisabled:false,
+      oneDisabled: false,
       realName: {
         name: '',
         tel: '',
@@ -139,10 +174,9 @@ export default {
       // codeMsg: '获取验证码',
       showDate: false,
       currentDate: new Date(),
-      minDate:new Date(),
-      maxDate:new Date(getDay('addYear',new Date(), 100)),
-
-    }
+      minDate: new Date(),
+      maxDate: new Date(getDay('addYear', new Date(), 100))
+    };
   },
   methods: {
     init() {
@@ -150,91 +184,103 @@ export default {
       this.initUploadStatus();
     },
     confirmDate(value) {
-      this.showDate = false
-      this.realName.date = getDay('day', value)
+      this.showDate = false;
+      this.realName.date = getDay('day', value);
     },
-
 
     getParams() {
       let params = {
-        'sign_id': Cookies.get('sign_id'),
-        'legal_name': this.realName.name,
-        'legal_idcard_no': this.realName.idCard,
-        'legal_mobile': this.realName.tel,
-        'legal_email': this.realName.email,
-        'legal_card_deadline': this.realName.date,
-      }
-      return params
+        sign_id: Cookies.get('sign_id'),
+        legal_name: this.realName.name,
+        legal_idcard_no: this.realName.idCard,
+        legal_mobile: this.realName.tel,
+        legal_email: this.realName.email,
+        legal_card_deadline: this.realName.date
+      };
+      return params;
     },
     showAgreeFun() {
-      this.$emit('showAgree')
+      this.$emit('showAgree');
     },
     onFocus(key) {
-      this.realError[key] = false
+      this.realError[key] = false;
     },
     nextPage() {
-      let params = this.getParams()
+      let params = this.getParams();
 
       let validField = {
-        'legal_name': '请填写法人姓名',
-        'legal_mobile': { re: /^[1][3,4,5,7,8,9][0-9]{9}$/, emptyMsg: '请填写手机号', reMsg: '手机号格式有误' },
-        'legal_email':  { re: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, emptyMsg: '请填写邮箱', reMsg: '邮箱格式有误' },
-        'legal_idcard_no': { re: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, emptyMsg: '请填写身份证号码', reMsg: '身份证号码格式有误' },
-        'legal_card_deadline': '请选择身份证过期日',
-      }
+        legal_name: '请填写法人姓名',
+        legal_mobile: {
+          re: /^[1][3,4,5,7,8,9][0-9]{9}$/,
+          emptyMsg: '请填写手机号',
+          reMsg: '手机号格式有误'
+        },
+        legal_email: {
+          re: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+          emptyMsg: '请填写邮箱',
+          reMsg: '邮箱格式有误'
+        },
+        legal_idcard_no: {
+          re: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+          emptyMsg: '请填写身份证号码',
+          reMsg: '身份证号码格式有误'
+        },
+        legal_card_deadline: '请选择身份证过期日'
+      };
       this.globalMixin_validFormEmpty(validField, params)
-      .then(() => {
+        .then(() => {
+          if (!this.isImagesListUploaded()) {
+            return;
+          }
 
-        if (!this.isImagesListUploaded()) {
-          return
-        }
-
-        if (!this.checked) {
-          this.$toast({
-            message: '请勾选知情同意书'
-          })
-          return
-        }
-        setRealUserInfo(params)
-        .then(({ result }) => {
-          this.globalMixin_updateSigning(result)
-           this.$emit('nextPage')
+          if (!this.checked) {
+            this.$toast({
+              message: '请勾选知情同意书'
+            });
+            return;
+          }
+          setRealUserInfo(params)
+            .then(({ result }) => {
+              this.globalMixin_updateSigning(result);
+              this.$emit('nextPage');
+            })
+            .catch(() => {});
         })
-        .catch(() => {})
-      })
-      .catch(() => {
-
-      })
+        .catch(() => {});
     },
     isImagesListUploaded() {
       let uploadIndexList = ['0', '1'];
       let notUploaded = uploadIndexList.some((item, index) => {
-        return this.$refs[`upload${ item }`].hasUploaded() === false;
-      })
+        return this.$refs[`upload${item}`].hasUploaded() === false;
+      });
       return !notUploaded;
     },
     initUploadStatus() {
-      ['0', '1'].forEach((item) => {
-        this.$refs[`upload${ item }`].init();
-      })
+      ['0', '1'].forEach(item => {
+        this.$refs[`upload${item}`].init();
+      });
     },
     goBack() {
-      this.$emit('goBack')
+      this.$emit('goBack');
     },
     initPageData() {
-      let { legal_name, legal_idcard_no, legal_mobile, legal_email, legal_card_deadline } = this.globalMixin_getSigning()
+      let {
+        legal_name,
+        legal_idcard_no,
+        legal_mobile,
+        legal_email,
+        legal_card_deadline
+      } = this.globalMixin_getSigning();
 
       this.realName.name = legal_name;
       this.realName.idCard = legal_idcard_no;
       this.realName.tel = legal_mobile;
       this.realName.email = legal_email;
-      this.realName.date = legal_card_deadline
+      this.realName.date = legal_card_deadline;
     }
   },
-  mounted() {
-   
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less" scoped>
