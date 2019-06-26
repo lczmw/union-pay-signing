@@ -19,7 +19,7 @@
         <van-field
           v-model="feeRate"
           label="费率"
-          placeholder="0.25至1.00之间"
+          placeholder="0.25至0.6之间"
           autosize
           type="number"
           :error="accountError.account"
@@ -254,9 +254,9 @@ export default {
             });
             return;
           }
-          if (this.feeRate > 1) {
+          if (this.feeRate > 0.6) {
             this.$toast({
-              message: '费率不能高于1.00',
+              message: '费率不能高于0.6',
               duration: 2000
             });
             return;
