@@ -30,6 +30,7 @@
       <div
         class="sign-item"
         v-for="(item, index) in list"
+        :key="index"
         @click="handleSignItemClick(item)"
       >
         <div
