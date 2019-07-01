@@ -14,7 +14,7 @@
           autosize
           :error="accountError.account"
           @focus="onFocus('account')"
-          @click.native="popShow1 = true"
+          @click.native="popShow1 = true;accountVal = '';accountList = JSON.parse(JSON.stringify(accountListOrigin))"
         />
         <van-field
           v-model="feeRate"
@@ -63,6 +63,12 @@
       v-model="popShow1"
       position="bottom"
     >
+      <div>
+        <van-search
+          v-model="accountVal"
+          @input="handleAccountChange"
+        ></van-search>
+      </div>
       <div class="popup-inner">
         <van-checkbox-group v-model="needOpenPospalAccounts">
           <van-cell-group>
@@ -127,10 +133,12 @@ import Cookies from 'js-cookie';
 import Area from '@/components/Area';
 import Upload from '@/components/Upload';
 import { setBasicInfo } from '@/api';
+import { Search } from 'vant';
 export default {
   components: {
     Area,
-    Upload
+    Upload,
+    VanSearch: Search
   },
   props: {
     footerHS: true
@@ -164,7 +172,9 @@ export default {
       field4: '',
       field5: '',
       columns1: ['B扫C', 'C扫B'],
-      columns2: ['收银机', '公众号支付', '小程序支付']
+      columns2: ['收银机', '公众号支付', '小程序支付'],
+
+      accountVal: ''
     };
   },
   computed: {
@@ -179,7 +189,11 @@ export default {
     }
   },
   methods: {
-    onChange() {},
+    handleAccountChange(val) {
+      this.accountList = this.accountListOrigin.filter(item => {
+        return item.indexOf(val) !== -1;
+      });
+    },
     onPickerConfirm1(data) {
       this.field3 = data;
       this.popShow2 = false;
@@ -293,7 +307,7 @@ export default {
           : need_open_pospal_accounts.split(',');
       this.feeRate = fee_rate || '';
       this.accountList = all_pospal_accounts;
-
+      this.accountListOrigin = JSON.parse(JSON.stringify(all_pospal_accounts));
       if (product_bsc === 1) {
         this.field3.push('B扫C');
       }
