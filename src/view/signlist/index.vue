@@ -68,6 +68,13 @@
 
         </div>
         <div class="sign-item__content">
+          <div
+            class="sign-item__row"
+            v-if="item.crm_account !== '' && item.crm_account !== undefined"
+          >
+            <div class="sign-item__row-key">代理账号</div>
+            <div class="sign-item__row-value">{{ item.crm_account }}</div>
+          </div>
           <div class="sign-item__row">
             <div class="sign-item__row-key">法人姓名</div>
             <div class="sign-item__row-value">{{ item.legal_name }}</div>
@@ -76,6 +83,7 @@
             <div class="sign-item__row-key">手机号码</div>
             <div class="sign-item__row-value">{{ item.legal_mobile }}</div>
           </div>
+
           <div
             class="sign-item__row"
             v-if="item.fee_rate"
@@ -91,6 +99,7 @@
             <div class="sign-item__row-key">入网状态</div>
             <div class="sign-item__row-value">{{ item.apply_status_msg }}</div>
           </div>
+
           <div
             class="sign-item__row"
             v-if="item.fail_reason !== ''"
@@ -98,6 +107,7 @@
             <div class="sign-item__row-key">失败原因</div>
             <div class="sign-item__row-value is-red">{{ item.fail_reason }}</div>
           </div>
+
         </div>
 
       </div>
@@ -163,6 +173,7 @@
 import { QuerySignRecords, NewSign, UpdateConfigStatu, Export } from '@/api';
 import { List, Search, Radio, RadioGroup, Loading } from 'vant';
 import Cookies from 'js-cookie';
+import querystring from 'querystring';
 export default {
   components: {
     VanList: List,
@@ -228,15 +239,19 @@ export default {
           window.location.hostname +
           (window.location.port ? ':' + window.location.port : '');
       }
-      window.location = `${
-        window.location.origin
-      }/wxapi/UnionPaySigning/Export?config_status=${status}`;
+      window.location = `${window.location.origin}/wxapi/UnionPaySigning/Export?config_status=${status}`;
       // window.open(`${window.location.origin}/wxapi/UnionPaySigning/Export?config_status=${ status }`, '_blank');
     },
     addSign() {
-      NewSign({
-        pospal_account: Cookies.get('account')
-      })
+      let r = window.location.search.substr(1);
+      let { crm_account } = querystring.parse(r);
+      let pospal_account = Cookies.get('account');
+
+      let parmas =
+        crm_account === undefined || crm_account === ''
+          ? { pospal_account }
+          : { crm_account, pospal_account };
+      NewSign(parmas)
         .then(({ result }) => {
           Cookies.set('sign_id', result.id);
           this.$router.push('/home');
