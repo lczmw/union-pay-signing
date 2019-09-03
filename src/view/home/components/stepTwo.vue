@@ -20,6 +20,25 @@
             :error="businessError.name"
             @focus="onFocus('name')"
           />
+
+          <van-field
+            v-model="businessInfo.startDate"
+            label="营业执照开始日期"
+            placeholder="请选择"
+            right-icon="arrow"
+            readonly
+            :disabled="twoDisabled"
+            @click="showDate = true"
+          />
+          <van-field
+            v-model="businessInfo.endDate"
+            label="营业执照结束日期"
+            placeholder="请选择"
+            right-icon="arrow"
+            readonly
+            :disabled="twoDisabled"
+            @click="showDate1 = true"
+          />
           <van-field
             v-model="businessInfo.addr"
             label="营业地址"
@@ -48,7 +67,10 @@
                 @focus="onFocus('name')"
               />
             </van-col>
-            <van-col class="endTip" span="3">道/路</van-col>
+            <van-col
+              class="endTip"
+              span="3"
+            >道/路</van-col>
             <van-col span="4">
               <van-field
                 v-model="businessInfo.number"
@@ -59,14 +81,17 @@
                 @focus="onFocus('name')"
               />
             </van-col>
-            <van-col class="endTip" span="3">号/弄</van-col>
+            <van-col
+              class="endTip"
+              span="3"
+            >号/弄</van-col>
           </van-row>
 
           <van-field
             v-model="businessInfo.moreAddr"
             label="补充地址"
             placeholder="请输入地址剩余说明部分(选填)"
-           :disabled="twoDisabled"
+            :disabled="twoDisabled"
             :error="businessError.moreAddr"
             @focus="onFocus('name')"
           />
@@ -75,7 +100,7 @@
             label="所属行业"
             placeholder="请选择"
             right-icon="arrow"
-           :disabled="twoDisabled"
+            :disabled="twoDisabled"
             readonly
             @click="showIndustry"
           />
@@ -84,7 +109,7 @@
             v-model="businessInfo.code"
             label="社会统一代码"
             placeholder="请输入社会统一代码"
-           :disabled="twoDisabled"
+            :disabled="twoDisabled"
             :error="businessError.code"
             @focus="onFocus('name')"
           />
@@ -102,51 +127,100 @@
           <!-- <van-uploader :after-read="onRead" class="home-upload-content-item">
           <img src="../../../assect/img/add.png" alt>
           </van-uploader>-->
-          <Upload :disabled="twoDisabled" document-type="0002" not-uploaded-tip="请上传营业执照" ref="upload0"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0002"
+            not-uploaded-tip="请上传营业执照"
+            ref="upload0"
+          />
         </div>
       </section>
-      <section class="home-upload" v-show="businessInfo.type=='普通营业执照'">
+      <section
+        class="home-upload"
+        v-show="businessInfo.type=='普通营业执照'"
+      >
         <div class="home-upload-txt">
           税务登记证
           <span>(图片支持jpg、png、bmg格式，文件不超过2M)</span>
         </div>
         <div class="home-upload-content">
-          <Upload :disabled="twoDisabled" document-type="0003" not-uploaded-tip="请上传税务登记证" ref="upload1"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0003"
+            not-uploaded-tip="请上传税务登记证"
+            ref="upload1"
+          />
         </div>
       </section>
-      <section class="home-upload" v-show="businessInfo.type=='普通营业执照'">
+      <section
+        class="home-upload"
+        v-show="businessInfo.type=='普通营业执照'"
+      >
         <div class="home-upload-txt">
           组织机构代码证
           <span>(图片支持jpg、png、bmg格式，文件不超过2M)</span>
         </div>
         <div class="home-upload-content">
-          <Upload :disabled="twoDisabled" document-type="0004" not-uploaded-tip="请上传组织机构代码证" ref="upload2"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0004"
+            not-uploaded-tip="请上传组织机构代码证"
+            ref="upload2"
+          />
         </div>
       </section>
-      <section class="home-upload" v-show="businessInfo.type">
+      <section
+        class="home-upload"
+        v-show="businessInfo.type"
+      >
         <div class="home-upload-txt">
           营业场所照片
           <span>(图一请上传店外照片，图二请上传店内照片，图片支持jpg、png、bmg格式，文件不超过2M)</span>
         </div>
         <div class="home-upload-content">
-          <Upload :disabled="twoDisabled" document-type="0005" not-uploaded-tip="请上传店外照片" ref="upload3"/>
-          <Upload :disabled="twoDisabled" document-type="0015" not-uploaded-tip="请上传店内照片" ref="upload4"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0005"
+            not-uploaded-tip="请上传店外照片"
+            ref="upload3"
+          />
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0015"
+            not-uploaded-tip="请上传店内照片"
+            ref="upload4"
+          />
         </div>
       </section>
-      <section class="home-upload" v-show="businessInfo.type">
+      <section
+        class="home-upload"
+        v-show="businessInfo.type"
+      >
         <div class="home-upload-txt">
           辅助证明材料
           <span>(选填，图片支持jpg、png、bmg格式，文件不超过2M)</span>
         </div>
         <div class="home-upload-content">
-          <Upload :disabled="twoDisabled" document-type="0008"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0008"
+          />
 
-          <Upload :disabled="twoDisabled" document-type="0013"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0013"
+          />
 
-          <Upload :disabled="twoDisabled" document-type="0014"/>
+          <Upload
+            :disabled="twoDisabled"
+            document-type="0014"
+          />
         </div>
       </section>
-      <ul class="home-tip" v-show="businessInfo.type">
+      <ul
+        class="home-tip"
+        v-show="businessInfo.type"
+      >
         <li>
           <span class="dot">●</span>辅助证明材料: 包括但不限于营业场所租赁协议或者产权证明、集中经营场所管理方出具的证明文件等能够反映小微商户真实、合法从事商品或服务交易活动的材料。
         </li>
@@ -154,12 +228,24 @@
           <span class="dot">●</span>最多可上传三张图片
         </li>
       </ul>
-      <div class="step2-tip" v-show="!businessInfo.type">
-        <img class="step2-demo" src="../../../assect/img/demo.png">
-        <img class="step2-arrow" src="../../../assect/img/line-arrow.png">
+      <div
+        class="step2-tip"
+        v-show="!businessInfo.type"
+      >
+        <img
+          class="step2-demo"
+          src="../../../assect/img/demo.png"
+        >
+        <img
+          class="step2-arrow"
+          src="../../../assect/img/line-arrow.png"
+        >
         <p>请选择营业执照类型</p>
       </div>
-      <van-popup v-model="showBusinessType" position="bottom">
+      <van-popup
+        v-model="showBusinessType"
+        position="bottom"
+      >
         <van-picker
           :columns="businessTypeOption"
           :default-index="2"
@@ -168,26 +254,68 @@
           @cancel="showBusinessType=false"
         />
       </van-popup>
-      <van-popup v-model="showArea" position="bottom">
-        <Area :areaValue="businessInfo.country" @hideArea="hideArea" @confirmArea="confirmArea"/>
+      <van-popup
+        v-model="showArea"
+        position="bottom"
+      >
+        <Area
+          :areaValue="businessInfo.country"
+          @hideArea="hideArea"
+          @confirmArea="confirmArea"
+        />
+      </van-popup>
+
+      <van-popup
+        v-model="showDate"
+        position="bottom"
+      >
+        <van-datetime-picker
+          v-model="currentDate"
+          :max-date="minDate"
+          type="date"
+          @confirm="confirmDate"
+          @cancel="showDate=false"
+        />
+      </van-popup>
+
+      <van-popup
+        v-model="showDate1"
+        position="bottom"
+      >
+        <van-datetime-picker
+          v-model="currentDate1"
+          :max-date="maxDate"
+          :min-date="minDate"
+          type="date"
+          @confirm="confirmDate1"
+          @cancel="showDate1=false"
+        />
       </van-popup>
     </div>
 
     <footer :style="footerHS?'':'position:relative'">
       <div class="doubleBtn">
-        <van-button type="warning" size="large" @click="goBack">上一步</van-button>
-        <van-button type="primary" size="large" @click="nextPage">下一步</van-button>
+        <van-button
+          type="warning"
+          size="large"
+          @click="goBack"
+        >上一步</van-button>
+        <van-button
+          type="primary"
+          size="large"
+          @click="nextPage"
+        >下一步</van-button>
       </div>
     </footer>
   </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import Area from '@/components/Area'
-import Upload from '@/components/Upload'
-import { setBusinessInfo } from '@/api'
-
+import Cookies from 'js-cookie';
+import Area from '@/components/Area';
+import Upload from '@/components/Upload';
+import { setBusinessInfo } from '@/api';
+import { getDay } from '@/utils';
 export default {
   components: {
     Area,
@@ -196,7 +324,7 @@ export default {
   props: {
     footerHS: true,
     industryId: '',
-    industryText: '',
+    industryText: ''
   },
   watch: {
     industryId: {
@@ -222,7 +350,9 @@ export default {
         city: '',
         country: '',
         provinceId: '',
-        index: ''
+        index: '',
+        startDate: '',
+        endDate: ''
       },
       businessError: {
         name: false,
@@ -236,142 +366,165 @@ export default {
       showBusinessType: false,
       businessTypeOption: ['多合一营业执照', '普通营业执照'],
       showArea: false,
-      shop: {}
-    }
+      shop: {},
+      showDate: false,
+      showDate1: false,
+      currentDate: new Date(),
+      currentDate1: new Date(),
+      minDate: new Date(),
+      maxDate: new Date(getDay('addYear', new Date(), 100))
+    };
   },
-  mounted() {
-
-   
-  },
+  mounted() {},
   methods: {
     initPageData() {
-      let { license_type, shop_name, shop_province_id, shop_city_id, shop_country_id, shop_road, shop_house_no, shop_addr_ext, mccCode, shop_lic } = this.globalMixin_getSigning()
+      let {
+        license_type,
+        shop_name,
+        shop_province_id,
+        shop_city_id,
+        shop_country_id,
+        shop_road,
+        shop_house_no,
+        shop_addr_ext,
+        mccCode,
+        shop_lic,
+        license_begindate,
+        license_deadline
+      } = this.globalMixin_getSigning();
 
-
-    this.businessInfo.index = license_type;
-    this.businessInfo.type =  ['多合一营业执照', '普通营业执照'][license_type];
-    this.businessInfo.name = shop_name;
-    this.shop.provinceId = shop_province_id;
-    this.shop.cityId = shop_city_id;
-    this.shop.countryId = shop_country_id;
-    this.businessInfo.road = shop_road;
-    this.businessInfo.number = shop_house_no;
-    this.businessInfo.moreAddr = shop_addr_ext;
-    this.industryCode = mccCode;
-    this.businessInfo.code = shop_lic;
+      this.businessInfo.index = license_type;
+      this.businessInfo.type = ['多合一营业执照', '普通营业执照'][license_type];
+      this.businessInfo.name = shop_name;
+      this.shop.provinceId = shop_province_id;
+      this.shop.cityId = shop_city_id;
+      this.shop.countryId = shop_country_id;
+      this.businessInfo.road = shop_road;
+      this.businessInfo.number = shop_house_no;
+      this.businessInfo.moreAddr = shop_addr_ext;
+      this.industryCode = mccCode;
+      this.businessInfo.code = shop_lic;
+      this.businessInfo.startDate = license_begindate || '';
+      this.businessInfo.endDate = license_deadline || '';
     },
     init() {
       this.initPageData();
       this.initUploadStatus();
     },
+    confirmDate(value) {
+      this.showDate = false;
+      this.businessInfo.startDate = getDay('day', value);
+    },
+    confirmDate1(value) {
+      this.showDate1 = false;
+      this.businessInfo.endDate = getDay('day', value);
+    },
     onConfirm(value, index) {
-   
-      this.showBusinessType = false
+      this.showBusinessType = false;
       // this.$toast(`当前值：${value}, 当前索引：${index}`);
-      this.businessInfo.type = value
-      this.businessInfo.index = index
+      this.businessInfo.type = value;
+      this.businessInfo.index = index;
     },
     confirmArea(data) {
-   
-      this.showArea = false
-      this.businessInfo.country = data[2].code
-      this.businessInfo.addr = data[0].name + data[1].name + data[2].name
-      this.businessInfo.provinceId = data[0].code
-      this.businessInfo.cityId = data[1].code
-      this.businessInfo.countryId = data[2].code
+      this.showArea = false;
+      this.businessInfo.country = data[2].code;
+      this.businessInfo.addr = data[0].name + data[1].name + data[2].name;
+      this.businessInfo.provinceId = data[0].code;
+      this.businessInfo.cityId = data[1].code;
+      this.businessInfo.countryId = data[2].code;
 
       this.shop = {
         provinceId: data[0].code,
         cityId: data[1].code,
-        countryId: data[2].code,
-      }
+        countryId: data[2].code
+      };
       // console.log(province + city + country)
     },
     showAreaFun() {
-      this.showArea = true
+      this.showArea = true;
     },
     hideArea() {
-      this.showArea = false
+      this.showArea = false;
     },
     onRead(file) {
-      console.log(file)
+      console.log(file);
     },
     showIndustry() {
-      this.$emit('showIndustry')
+      this.$emit('showIndustry');
     },
     goBack() {
-      this.$emit('goBack')
+      this.$emit('goBack');
     },
-    onFocus() {
-
-    },
+    onFocus() {},
     getParams() {
       let params = {
-        'sign_id': Cookies.get('sign_id'),
-        'license_type': this.businessInfo.index,
-        'shop_name': this.businessInfo.name,
-        'shop_province_id': this.shop.provinceId,
-        'shop_city_id': this.shop.cityId,
-        'shop_country_id': this.shop.countryId,
-        'shop_road': this.businessInfo.road,
-        'shop_house_no': this.businessInfo.number,
-        'shop_addr_ext': this.businessInfo.moreAddr,
-        'mccCode': this.industryCode,
-        'shop_lic': this.businessInfo.code,
-      }
+        sign_id: Cookies.get('sign_id'),
+        license_type: this.businessInfo.index,
+        shop_name: this.businessInfo.name,
+        shop_province_id: this.shop.provinceId,
+        shop_city_id: this.shop.cityId,
+        shop_country_id: this.shop.countryId,
+        shop_road: this.businessInfo.road,
+        shop_house_no: this.businessInfo.number,
+        shop_addr_ext: this.businessInfo.moreAddr,
+        mccCode: this.industryCode,
+        shop_lic: this.businessInfo.code,
+        license_begindate: this.businessInfo.startDate,
+        license_deadline: this.businessInfo.endDate
+      };
 
-      return params
+      return params;
     },
     nextPage() {
-      
-      let params = this.getParams()
+      let params = this.getParams();
       let validField = {
-        'license_type': '请选择营业执照类型',
-        'shop_name': '请输入营业名称',
-        'shop_province_id': '请选择营业地址',
-        'shop_road': '请输入详细地址路名',
-        'shop_house_no': '请输入详细地址门牌',
+        license_type: '请选择营业执照类型',
+        shop_name: '请输入营业名称',
+        license_begindate: '营业执照开始日期',
+        license_deadline: '营业执照结束日期',
+        shop_province_id: '请选择营业地址',
+        shop_road: '请输入详细地址路名',
+        shop_house_no: '请输入详细地址门牌',
         // 'shop_addr_ext': '请输入补充地址',
-        'mccCode': '请选择所属行业',
-        'shop_lic': '请输入社会统一代码'
-      }
+        mccCode: '请选择所属行业',
+        shop_lic: '请输入社会统一代码'
+      };
       this.globalMixin_validFormEmpty(validField, params)
-      .then(() => {
+        .then(() => {
+          if (!this.isImagesListUploaded()) {
+            return;
+          }
 
-        if (!this.isImagesListUploaded()) {
-          return
-        }
-        
-        setBusinessInfo(params)
-        .then(({ result }) => {
-          this.globalMixin_updateSigning(result)
-           this.$emit('nextPage')
+          setBusinessInfo(params)
+            .then(({ result }) => {
+              this.globalMixin_updateSigning(result);
+              this.$emit('nextPage');
+            })
+            .catch(() => {});
         })
-        .catch(() => {})
-      })
-      .catch(() => {
-
-      })
+        .catch(() => {});
     },
     isImagesListUploaded() {
-      let uploadIndexList = this.businessInfo.type === '多合一营业执照' ? ['0', '3', '4'] : ['0', '1', '2', '3', '4'];
+      let uploadIndexList =
+        this.businessInfo.type === '多合一营业执照'
+          ? ['0', '3', '4']
+          : ['0', '1', '2', '3', '4'];
       let notUploaded = uploadIndexList.some((item, index) => {
-        return this.$refs[`upload${ item }`].hasUploaded() === false;
-      })
+        return this.$refs[`upload${item}`].hasUploaded() === false;
+      });
       return !notUploaded;
     },
     initUploadStatus() {
-      
-       ['0', '1', '2', '3', '4'].forEach((item) => {
-        this.$refs[`upload${ item }`].init();
-      })
-    },
+      ['0', '1', '2', '3', '4'].forEach(item => {
+        this.$refs[`upload${item}`].init();
+      });
+    }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-@import "../../../assect/style/var.less";
+@import '../../../assect/style/var.less';
 .fixedFooter {
   padding-bottom: 60px;
 }

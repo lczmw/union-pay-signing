@@ -17,7 +17,7 @@ module.exports = {
     // },
     proxy: {
       '/wxapi': {
-        target: 'https://wxchengxubak.pospal.cn/wxapi/',
+        target: 'https://wxservice-dev.pospal.cn/wxapi/',
         // target: 'http://192.168.2.197:29429/',
         secure: false,
         changeOrigin: true,

@@ -62,14 +62,24 @@
           @focus="onFocus('idCard')"
         />
         <van-field
-          v-model="realName.date"
-          label="身份证有效期"
+          v-model="realName.startDate"
+          label="身份证开始日期"
           placeholder="请选择"
           right-icon="arrow"
           readonly
           :disabled="oneDisabled"
           @click="showDate = true"
         />
+        <van-field
+          v-model="realName.endDate"
+          label="身份证结束日期"
+          placeholder="请选择"
+          right-icon="arrow"
+          readonly
+          :disabled="oneDisabled"
+          @click="showDate1 = true"
+        />
+
       </van-cell-group>
       <section class="home-upload">
         <div class="home-upload-txt">
@@ -109,11 +119,24 @@
       >
         <van-datetime-picker
           v-model="currentDate"
-          :max-date="maxDate"
-          :min-date="minDate"
+          :max-date="minDate"
           type="date"
           @confirm="confirmDate"
           @cancel="showDate=false"
+        />
+      </van-popup>
+
+      <van-popup
+        v-model="showDate1"
+        position="bottom"
+      >
+        <van-datetime-picker
+          v-model="currentDate1"
+          :max-date="maxDate"
+          :min-date="minDate"
+          type="date"
+          @confirm="confirmDate1"
+          @cancel="showDate1=false"
         />
       </van-popup>
     </div>
@@ -160,7 +183,8 @@ export default {
         // code: '',
         email: '',
         idCard: '',
-        date: ''
+        startDate: '',
+        endDate: ''
       },
       realError: {
         name: false,
@@ -173,7 +197,9 @@ export default {
       auth_time: 0,
       // codeMsg: '获取验证码',
       showDate: false,
+      showDate1: false,
       currentDate: new Date(),
+      currentDate1: new Date(),
       minDate: new Date(),
       maxDate: new Date(getDay('addYear', new Date(), 100))
     };
@@ -185,7 +211,11 @@ export default {
     },
     confirmDate(value) {
       this.showDate = false;
-      this.realName.date = getDay('day', value);
+      this.realName.startDate = getDay('day', value);
+    },
+    confirmDate1(value) {
+      this.showDate1 = false;
+      this.realName.endDate = getDay('day', value);
     },
 
     getParams() {
@@ -195,7 +225,8 @@ export default {
         legal_idcard_no: this.realName.idCard,
         legal_mobile: this.realName.tel,
         legal_email: this.realName.email,
-        legal_card_deadline: this.realName.date
+        legal_card_begindate: this.realName.startDate,
+        legal_card_deadline: this.realName.endDate
       };
       return params;
     },
@@ -225,7 +256,8 @@ export default {
           emptyMsg: '请填写身份证号码',
           reMsg: '身份证号码格式有误'
         },
-        legal_card_deadline: '请选择身份证过期日'
+        legal_card_begindate: '请选择身份证开始日期',
+        legal_card_deadline: '请选择身份证结束日期'
       };
       this.globalMixin_validFormEmpty(validField, params)
         .then(() => {
@@ -269,14 +301,16 @@ export default {
         legal_idcard_no,
         legal_mobile,
         legal_email,
-        legal_card_deadline
+        legal_card_deadline,
+        legal_card_begindate
       } = this.globalMixin_getSigning();
 
       this.realName.name = legal_name;
       this.realName.idCard = legal_idcard_no;
       this.realName.tel = legal_mobile;
       this.realName.email = legal_email;
-      this.realName.date = legal_card_deadline;
+      this.realName.startDate = legal_card_begindate;
+      this.realName.endDate = legal_card_deadline;
     }
   },
   mounted() {}
