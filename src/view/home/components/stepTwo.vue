@@ -271,6 +271,7 @@
       >
         <van-datetime-picker
           v-model="currentDate"
+          :min-date="new Date('1900-01-01')"
           :max-date="minDate"
           type="date"
           @confirm="confirmDate"
