@@ -38,7 +38,14 @@
             readonly
             :disabled="twoDisabled"
             @click="showDate1 = true"
-          />
+          >
+            <van-button
+              slot="button"
+              size="small"
+              type="primary"
+              @click="setDeadline"
+            >无固定期限</van-button>
+          </van-field>
           <van-field
             v-model="businessInfo.addr"
             label="营业地址"
@@ -455,6 +462,9 @@ export default {
     },
     goBack() {
       this.$emit('goBack');
+    },
+    setDeadline() {
+      this.businessInfo.endDate = '9999-12-31';
     },
     onFocus() {},
     getParams() {
