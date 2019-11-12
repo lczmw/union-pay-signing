@@ -243,7 +243,7 @@ export default {
       let validField = {
         legal_name: '请填写法人姓名',
         legal_mobile: {
-          re: /^[1][3,4,5,7,8,9][0-9]{9}$/,
+          re: /^[1][3,4,5,6,7,8,9][0-9]{9}$/,
           emptyMsg: '请填写手机号',
           reMsg: '手机号格式有误'
         },
